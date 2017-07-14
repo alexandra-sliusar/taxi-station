@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context>
+	<!--  <WatchedResource>WEB-INF/web.xml</WatchedResource> -->
+	<Resource name="jdbc/taxistation" auth="Container"
+		type="javax.sql.DataSource" maxActive="50" maxIdle="30" maxWait="10000"
+		username="root" password="littlestar" driverClassName="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://localhost/project4?characterEncoding=UTF-8" />
+</Context>

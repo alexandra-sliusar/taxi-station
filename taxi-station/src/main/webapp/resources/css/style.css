@@ -1,0 +1,12 @@
+body{
+  background-color: DCD1CA;
+}
+.menu { 
+    border: 3px solid;
+  border-color: white;
+    padding: 30px;
+    background: #dddddd;
+    border-bottom-left-radius: 1em;
+    border-bottom-right-radius: 1em;
+    font: 22px Cambria;  
+}

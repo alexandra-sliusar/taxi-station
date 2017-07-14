@@ -9,7 +9,7 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<body>
+<%@ include file="/WEB-INF/pages/addon/header.jsp"%>
 <div class="container" align="center" style="width: 300px;">
 	<h3>Hello from inside</h3>
 </div>
