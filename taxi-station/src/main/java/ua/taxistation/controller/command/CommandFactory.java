@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import ua.taxistation.controller.command.realization.ChangeLocaleCommand;
 import ua.taxistation.controller.command.realization.HomeCommand;
 import ua.taxistation.controller.command.realization.authorization.GetLoginCommand;
 import ua.taxistation.controller.command.realization.authorization.GetSignupCommand;
