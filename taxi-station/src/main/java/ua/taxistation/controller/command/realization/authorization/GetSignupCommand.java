@@ -7,14 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import ua.taxistation.controller.command.Command;
+import ua.taxistation.controller.constants.Page;
 
-public class LoginPageCommand implements Command {
+public class GetSignupCommand implements Command {
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		return null;
+		return Page.SIGNUP_PAGE;
 	}
 
 }
