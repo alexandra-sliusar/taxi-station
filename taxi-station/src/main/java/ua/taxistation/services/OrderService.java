@@ -48,8 +48,17 @@ public class OrderService {
 
 	public List<Order> getOrdersByUser(User user) {
 		List<Order> orders = new ArrayList<>();
-		try (OrderDao orderDao = daoFactory.createOrderDao()) {
+		try (DaoConnection connection = daoFactory.getConnection()) {
+			connection.begin();
+			OrderDao orderDao = daoFactory.createOrderDao(connection);
+			RequestDao requestDao = daoFactory.createRequestDao(connection);
+			CarDao carDao = daoFactory.createCarDao(connection);
 			orders.addAll(orderDao.getOrdersByUserId(user.getId()));
+			for (Order order: orders)
+			{
+				order.setRequest(requestDao.getById(order.getRequest().getId()).get());
+				order.setCar(carDao.getById(order.getCar().getId()).get());
+			}
 		}
 		return orders;
 	}

@@ -10,7 +10,5 @@ public interface RequestDao extends GenericDao<Request>, AutoCloseable {
 
 	public List<Request> getRequestsByStatus(RequestStatus requestStatus);
 
-	public List<CarCharacteristics> getCarCharacteristicsByRequestId(Long requestId);
-
 	void close();
 }

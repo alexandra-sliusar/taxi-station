@@ -7,10 +7,6 @@ public final class Validator {
 	private static final String ADDRESS_REGEX = "^([A-Za-z0-9\\.,/\\s]){3,}[A-Za-z0-9\\.,/\\s]+";
 	private static final String PHONE_NUMBER_REGEX = "^\\(\\d{3}\\)\\s\\d{3}-\\d{2}-\\d{2}$";
 
-	// private static final String DATETIME_PATTERN_EN = "MM.dd.yyyy hh:mm:ss
-	// a";
-	// private static final String DATETIME_PATTERN_UA = "dd.MM.yyyy HH:mm:ss";
-
 	private static class Holder {
 		static final Validator INSTANCE = new Validator();
 	}

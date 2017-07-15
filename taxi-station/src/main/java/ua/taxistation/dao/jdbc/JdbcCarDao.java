@@ -21,24 +21,25 @@ import ua.taxistation.exceptions.ServerAppException;
 public class JdbcCarDao implements CarDao {
 
 	private static String SELECT_ALL_CARS = "SELECT cars.id, cars.driver_id, cars.number, cars.model, "
-			+ "cars.color, cars.status FROM cars";
+			+ "cars.color, cars.status, car_characteristics.value FROM cars, m2m_cars_characteristics, car_characteristics"
+			+ "WHERE m2m_cars_characteristics.car_id = cars.id "
+			+ "AND m2m_cars_characteristics.characteristic_id = car_characteristics.id";
 
 	private static String SELECT_CAR_BY_ID = "SELECT cars.id, cars.driver_id, cars.number, cars.model, "
-			+ "cars.color, cars.status FROM cars WHERE cars.id = ?";
+			+ "cars.color, cars.status, car_characteristics.value FROM cars, m2m_cars_characteristics, car_characteristics "
+			+ "WHERE m2m_cars_characteristics.car_id = cars.id "
+			+ "AND m2m_cars_characteristics.characteristic_id = car_characteristics.id AND cars.id = ?";
 
 	private static String SELECT_CAR_BY_DRIVER = "SELECT cars.id, cars.driver_id, cars.number, cars.model, "
-			+ "cars.color, cars.status FROM cars WHERE cars.driver_id = ?";
+			+ "cars.color, cars.status, car_characteristics.value FROM cars, m2m_cars_characteristics, car_characteristics "
+			+ "WHERE m2m_cars_characteristics.car_id = cars.id "
+			+ "AND m2m_cars_characteristics.characteristic_id = car_characteristics.id AND cars.driver_id = ?";
 
 	private static String SELECT_CARS_BY_CHARACTERISTIC_AND_STATUS = "SELECT cars.id, cars.driver_id, cars.number, cars.model, "
 			+ "cars.color, cars.status FROM cars, m2m_cars_characteristics, car_characteristics "
 			+ "WHERE m2m_cars_characteristics.car_id = cars.id "
 			+ "AND m2m_cars_characteristics.characteristic_id = car_characteristics.id AND cars.status = ? "
 			+ "AND car_characteristics.value = ?";
-
-	private static String SELECT_CAR_CHARACTERISTICS_BY_CAR = "SELECT car_characteristics.value "
-			+ "FROM cars, m2m_cars_characteristics, car_characteristics "
-			+ "WHERE m2m_cars_characteristics.car_id = cars.id "
-			+ "AND m2m_cars_characteristics.characteristic_id = car_characteristics.id AND cars.id = ?";
 
 	private static String UPDATE_CAR = "UPDATE cars SET status = ? where id = ?";
 
@@ -72,27 +73,44 @@ public class JdbcCarDao implements CarDao {
 
 	@Override
 	public Optional<Car> getById(Long id) {
-		Optional<Car> car = Optional.empty();
+		Optional<Car> optionalCar = Optional.empty();
 		try (PreparedStatement query = connection.prepareStatement(SELECT_CAR_BY_ID)) {
 			query.setLong(1, id);
 			ResultSet resultSet = query.executeQuery();
 			if (resultSet.next()) {
-				car = Optional.of(extractCarFromResultSet(resultSet));
+				Car car = extractCarFromResultSet(resultSet);
+				car.setCarCharacteristics(extractCarCharacteristicsFromResultSet(resultSet));
+				optionalCar = Optional.of(car);
 			}
 		} catch (SQLException e) {
 			LOGGER.error("JdbcCarDao getById SQL failed: " + id, e);
 			throw new ServerAppException(e);
 		}
-		return car;
+		return optionalCar;
 	}
 
 	@Override
 	public List<Car> getAll() {
 		List<Car> cars = new ArrayList<>();
+		String last_car_number = "";
 		try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_CARS)) {
 			ResultSet resultSet = query.executeQuery();
+			Car car = new Car();
+			boolean ifFirstCar = true;
 			while (resultSet.next()) {
-				cars.add(extractCarFromResultSet(resultSet));
+				if (!last_car_number.equals(resultSet.getString(NUMBER))) {
+					if (!ifFirstCar)
+						cars.add(car);
+					else
+						ifFirstCar = false;
+					car = extractCarFromResultSet(resultSet);
+					car.addCarCharacteristic(
+							CarCharacteristics.valueOf(resultSet.getString(CHARACTERISTIC_VALUE).toUpperCase()));
+					last_car_number = car.getNumber();
+				} else {
+					car.addCarCharacteristic(
+							CarCharacteristics.valueOf(resultSet.getString(CHARACTERISTIC_VALUE).toUpperCase()));
+				}
 			}
 		} catch (SQLException e) {
 			LOGGER.error("JdbcCarDao getAll SQL failed", e);
@@ -131,7 +149,9 @@ public class JdbcCarDao implements CarDao {
 			query.setString(2, characteristic.name().toLowerCase());
 			ResultSet resultSet = query.executeQuery();
 			while (resultSet.next()) {
-				cars.add(extractCarFromResultSet(resultSet));
+				Car car = extractCarFromResultSet(resultSet);
+				car.addCarCharacteristic(characteristic);
+				cars.add(car);
 			}
 		} catch (SQLException e) {
 			LOGGER.error("JdbcCarDao getByCharacteristicsAndStatus SQL failed", e);
@@ -142,34 +162,20 @@ public class JdbcCarDao implements CarDao {
 
 	@Override
 	public Optional<Car> getCarByDriver(Long driverId) {
-		Optional<Car> car = Optional.empty();
+		Optional<Car> optionalCar = Optional.empty();
 		try (PreparedStatement query = connection.prepareStatement(SELECT_CAR_BY_DRIVER)) {
 			query.setLong(1, driverId);
 			ResultSet resultSet = query.executeQuery();
 			if (resultSet.next()) {
-				car = Optional.of(extractCarFromResultSet(resultSet));
+				Car car = extractCarFromResultSet(resultSet);
+				car.setCarCharacteristics(extractCarCharacteristicsFromResultSet(resultSet));
+				optionalCar = Optional.of(car);
 			}
 		} catch (SQLException e) {
 			LOGGER.error("JdbcCarDao getByDriver SQL failed: " + driverId, e);
 			throw new ServerAppException(e);
 		}
-		return car;
-	}
-
-	@Override
-	public List<CarCharacteristics> getCarCharacteristicsByCarId(Long carId) {
-		List<CarCharacteristics> carCharacteristics = new ArrayList<>();
-		try (PreparedStatement query = connection.prepareStatement(SELECT_CAR_CHARACTERISTICS_BY_CAR)) {
-			query.setLong(1, carId);
-			ResultSet resultSet = query.executeQuery();
-			while (resultSet.next()) {
-				carCharacteristics.add(extractCarCharacteristicFromResultSet(resultSet));
-			}
-		} catch (SQLException e) {
-			LOGGER.error("JdbcCarDao getCarCharacteristicsByCarId SQL failed: " + carId, e);
-			throw new ServerAppException(e);
-		}
-		return carCharacteristics;
+		return optionalCar;
 	}
 
 	@Override
@@ -189,11 +195,16 @@ public class JdbcCarDao implements CarDao {
 				.setNumber(resultSet.getString(NUMBER)).setColor(resultSet.getString(COLOR))
 				.setCarStatus(CarStatus.valueOf(resultSet.getString(STATUS).toUpperCase()))
 				.setDriver(new User.Builder().setId(resultSet.getLong(DRIVERID)).build()).build();
-		car.setCarCharacteristics(getCarCharacteristicsByCarId(car.getId()));
 		return car;
 	}
 
-	private CarCharacteristics extractCarCharacteristicFromResultSet(ResultSet resultSet) throws SQLException {
-		return CarCharacteristics.valueOf(resultSet.getString(CHARACTERISTIC_VALUE).toUpperCase());
+	private List<CarCharacteristics> extractCarCharacteristicsFromResultSet(ResultSet resultSet) throws SQLException {
+		List<CarCharacteristics> carCharacteristics = new ArrayList<>();
+		resultSet.beforeFirst();
+		while (resultSet.next()) {
+			carCharacteristics.add(CarCharacteristics.valueOf(resultSet.getString(CHARACTERISTIC_VALUE).toUpperCase()));
+		}
+		return carCharacteristics;
+
 	}
 }

@@ -3,6 +3,7 @@ package ua.taxistation.controller.command;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 import javax.servlet.http.HttpServletRequest;
 
 import ua.taxistation.controller.command.realization.ChangeLocaleCommand;
@@ -12,6 +13,9 @@ import ua.taxistation.controller.command.realization.authorization.GetSignupComm
 import ua.taxistation.controller.command.realization.authorization.LogoutCommand;
 import ua.taxistation.controller.command.realization.authorization.PostLoginCommand;
 import ua.taxistation.controller.command.realization.authorization.PostSignupCommand;
+import ua.taxistation.controller.command.realization.client.GetOrderCarCommand;
+import ua.taxistation.controller.command.realization.client.PostOrderCarCommand;
+import ua.taxistation.services.RequestService;
 import ua.taxistation.services.UserService;
 
 public class CommandFactory {
@@ -31,6 +35,8 @@ public class CommandFactory {
 		commands.put("POST:signup", new PostSignupCommand(UserService.getInstance()));
 		commands.put("GET:locale", new ChangeLocaleCommand());
 		commands.put("GET:logout", new LogoutCommand());
+		commands.put("GET:ordercar", new GetOrderCarCommand());
+		commands.put("POST:ordercar", new PostOrderCarCommand(RequestService.getInstance()));
 	}
 
 	public static Command getCommand(HttpServletRequest request) {

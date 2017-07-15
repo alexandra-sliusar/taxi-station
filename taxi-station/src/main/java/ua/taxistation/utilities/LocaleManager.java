@@ -19,4 +19,6 @@ public final class LocaleManager {
 	public static String PASS_REGEX_ERROR = "taxistation.signup.pass.error";
 	public static String PHONE_NUMBER_REGEX_ERROR = "taxistation.signup.phonenumber.error";
 	public static String SIGNUP_DB_ERROR = "taxistation.signup.db.error";
+	public static String INVALID_CAR_ORDER_DATA = "taxistation.login.carorder.data.error";
+	public static String SUCCESS_REQUEST_ADDITION = "taxistation.success.requestaddition";
 }

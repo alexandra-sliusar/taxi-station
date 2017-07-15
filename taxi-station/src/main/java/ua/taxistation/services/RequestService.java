@@ -50,7 +50,7 @@ public class RequestService {
 	public Request createRequest(RequestDto requestDto, User client) {
 		String pickup = requestDto.getPickup();
 		String destination = requestDto.getDestination();
-		Set<CarCharacteristics> carCharacteristics = requestDto.getCarCharacteristics();
+		List<CarCharacteristics> carCharacteristics = requestDto.getCarCharacteristics();
 
 		try (RequestDao requestDao = daoFactory.createRequestDao()) {
 			Request request = new Request.Builder().setUser(client).setDateOfRequest(LocalDateTime.now())

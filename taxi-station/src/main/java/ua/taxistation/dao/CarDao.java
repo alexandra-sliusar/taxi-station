@@ -13,7 +13,6 @@ public interface CarDao extends GenericDao<Car>, AutoCloseable {
 
 	public Optional<Car> getCarByDriver(Long driverId);
 
-	public List<CarCharacteristics> getCarCharacteristicsByCarId(Long carId);
 
 	void close();
 }

@@ -1,8 +1,10 @@
 package ua.taxistation.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import ua.taxistation.entity.enums.CarCharacteristics;
@@ -17,15 +19,15 @@ public class Car implements Serializable {
 	private String number;
 	private String model;
 	private String color;
-	private Set<CarCharacteristics> carCharacteristics;
+	private List<CarCharacteristics> carCharacteristics;
 	private CarStatus carStatus = CarStatus.AVAILABLE;
 
 	public Car() {
-		carCharacteristics = new HashSet<>();
+		carCharacteristics = new ArrayList<>();
 	}
 
 	public static class Builder {
-		protected Car car;
+		protected Car car = new Car();
 
 		public Builder() {
 		}
@@ -118,8 +120,12 @@ public class Car implements Serializable {
 		this.carStatus = carStatus;
 	}
 
-	public Set<CarCharacteristics> getCarCharacteristics() {
+	public List<CarCharacteristics> getCarCharacteristics() {
 		return carCharacteristics;
+	}
+
+	public void addCarCharacteristic(CarCharacteristics carCharacteristics) {
+		this.carCharacteristics.add(carCharacteristics);
 	}
 
 	public void setCarCharacteristics(Collection<CarCharacteristics> carCharacteristics) {

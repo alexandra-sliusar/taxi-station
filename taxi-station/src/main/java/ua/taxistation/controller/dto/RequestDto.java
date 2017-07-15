@@ -1,20 +1,21 @@
 package ua.taxistation.controller.dto;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+
 
 import ua.taxistation.entity.enums.CarCharacteristics;
 
 public class RequestDto {
 	private String pickup;
 	private String destination;
-	private Set<CarCharacteristics> carCharacteristics = new HashSet<>();
+	private List<CarCharacteristics> carCharacteristics = new ArrayList<>();
 
 	public RequestDto() {
 
 	}
 
-	public RequestDto(String pickup, String destination, Set<CarCharacteristics> carCharacteristics) {
+	public RequestDto(String pickup, String destination, List<CarCharacteristics> carCharacteristics) {
 		super();
 		this.pickup = pickup;
 		this.destination = destination;
@@ -37,11 +38,11 @@ public class RequestDto {
 		this.destination = destination;
 	}
 
-	public Set<CarCharacteristics> getCarCharacteristics() {
+	public List<CarCharacteristics> getCarCharacteristics() {
 		return carCharacteristics;
 	}
 
-	public void setCarCharacteristics(Set<CarCharacteristics> carCharacteristics) {
+	public void setCarCharacteristics(List<CarCharacteristics> carCharacteristics) {
 		this.carCharacteristics = carCharacteristics;
 	}
 

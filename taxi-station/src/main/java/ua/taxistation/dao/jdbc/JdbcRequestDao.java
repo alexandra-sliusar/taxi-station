@@ -27,15 +27,16 @@ public class JdbcRequestDao implements RequestDao {
 			+ "(request_id, characteristic_id) values (?, ?)";
 
 	private static String SELECT_REQUESTS_BY_STATUS = "SELECT requests.id, requests.user_id, requests.pickup, "
-			+ "requests.destination, requests.date_of_request, requests.status FROM requests WHERE status = ?";
-
-	private static String SELECT_REQUEST_BY_ID = "SELECT * FROM requests WHERE id = ?";
-
-	private static String SELECT_CAR_CHARACTERISTICS_BY_REQUEST_ID = "SELECT car_characteristics.value "
-			+ "FROM car_characteristics, m2m_requests_characteristics, requests "
+			+ "requests.destination, requests.date_of_request, requests.status, car_characteristics.value "
+			+ "FROM requests, car_characteristics, m2m_requests_characteristics "
 			+ "WHERE m2m_requests_characteristics.request_id = requests.id "
-			+ "AND m2m_requests_characteristics.characteristic_id = car_characteristics.id "
-			+ "AND requests.request_id = ?";
+			+ "AND m2m_requests_characteristics.characteristic_id = car_characteristics.id AND status = ?";
+
+	private static String SELECT_REQUEST_BY_ID = "SELECT requests.id, requests.user_id, requests.pickup, "
+			+ "requests.destination, requests.date_of_request, requests.status, car_characteristics.value "
+			+ "FROM requests, car_characteristics, m2m_requests_characteristics "
+			+ "WHERE m2m_requests_characteristics.request_id = requests.id "
+			+ "AND m2m_requests_characteristics.characteristic_id = car_characteristics.id AND requests.id = ?";
 
 	private static String UPDATE_REQUEST = "UPDATE requests SET status = ? where id = ?";
 
@@ -69,18 +70,20 @@ public class JdbcRequestDao implements RequestDao {
 
 	@Override
 	public Optional<Request> getById(Long id) {
-		Optional<Request> request = Optional.empty();
+		Optional<Request> optionalRequest = Optional.empty();
 		try (PreparedStatement query = connection.prepareStatement(SELECT_REQUEST_BY_ID)) {
 			query.setLong(1, id);
 			ResultSet resultSet = query.executeQuery();
 			if (resultSet.next()) {
-				request = Optional.of(extractRequestFromResultSet(resultSet));
+				Request request = extractRequestFromResultSet(resultSet);
+				request.setCarCharacteristics(extractCarCharacteristicsFromResultSet(resultSet));
+				optionalRequest = Optional.of(request);
 			}
 		} catch (SQLException e) {
 			LOGGER.error("JdbcRequestDao getById SQL failed: " + id, e);
 			throw new ServerAppException(e);
 		}
-		return request;
+		return optionalRequest;
 	}
 
 	@Override
@@ -97,9 +100,10 @@ public class JdbcRequestDao implements RequestDao {
 			query.setString(4, request.getRequestStatus().name().toLowerCase());
 			query.executeUpdate();
 			ResultSet generatedKeys = query.getGeneratedKeys();
-			if (generatedKeys.next())
+			if (generatedKeys.next()) {
 				request.setId(generatedKeys.getLong(1));
-			createCharacteristicsByRequest(request);
+				createCharacteristicsByRequest(request);
+			}
 		} catch (SQLException e) {
 			LOGGER.error("JdbcRequestDao createRequest SQL failed", e);
 			throw new ServerAppException(e);
@@ -154,11 +158,27 @@ public class JdbcRequestDao implements RequestDao {
 	@Override
 	public List<Request> getRequestsByStatus(RequestStatus requestStatus) {
 		List<Request> requests = new ArrayList<>();
+		Long last_request_id = (long) -2;
 		try (PreparedStatement query = connection.prepareStatement(SELECT_REQUESTS_BY_STATUS)) {
 			query.setString(1, requestStatus.name().toLowerCase());
 			ResultSet resultSet = query.executeQuery();
+
+			Request request = new Request();
+			boolean ifFirstRequest = true;
 			while (resultSet.next()) {
-				requests.add(extractRequestFromResultSet(resultSet));
+				if (!last_request_id.equals(resultSet.getString(ID))) {
+					if (!ifFirstRequest)
+						requests.add(request);
+					else
+						ifFirstRequest = false;
+					request = extractRequestFromResultSet(resultSet);
+					request.addCarCharacteristic(
+							CarCharacteristics.valueOf(resultSet.getString(CHARACTERISTIC_VALUE).toUpperCase()));
+					last_request_id = request.getId();
+				} else {
+					request.addCarCharacteristic(
+							CarCharacteristics.valueOf(resultSet.getString(CHARACTERISTIC_VALUE).toUpperCase()));
+				}
 			}
 		} catch (SQLException e) {
 			LOGGER.error("JdbcRequestDao getByStatus SQL failed", e);
@@ -167,34 +187,22 @@ public class JdbcRequestDao implements RequestDao {
 		return requests;
 	}
 
-	@Override
-	public List<CarCharacteristics> getCarCharacteristicsByRequestId(Long requestId) {
-		List<CarCharacteristics> carCharacteristics = new ArrayList<>();
-		try (PreparedStatement query = connection.prepareStatement(SELECT_CAR_CHARACTERISTICS_BY_REQUEST_ID)) {
-			query.setLong(1, requestId);
-			ResultSet resultSet = query.executeQuery();
-			while (resultSet.next()) {
-				carCharacteristics.add(extractCarCharacteristicFromResultSet(resultSet));
-			}
-		} catch (SQLException e) {
-			LOGGER.error("JdbcRequestDao getCarCharacteristicsByRequest SQL failed: " + requestId, e);
-			throw new ServerAppException(e);
-		}
-		return carCharacteristics;
-	}
-
 	private Request extractRequestFromResultSet(ResultSet resultSet) throws SQLException {
 		Request request = new Request.Builder().setId(resultSet.getLong(ID))
 				.setUser(new User.Builder().setId(resultSet.getLong(USERID)).build())
 				.setPickup(resultSet.getString(PICKUP)).setDestination(resultSet.getString(DESTINATION))
 				.setRequestStatus(RequestStatus.valueOf(resultSet.getString(STATUS).toUpperCase()))
 				.setDateOfRequest(resultSet.getTimestamp(DATE_OF_REQUEST).toLocalDateTime()).build();
-		request.setCarCharacteristics(getCarCharacteristicsByRequestId(request.getId()));
 		return request;
 	}
 
-	private CarCharacteristics extractCarCharacteristicFromResultSet(ResultSet resultSet) throws SQLException {
-		return CarCharacteristics.valueOf(resultSet.getString(CHARACTERISTIC_VALUE).toUpperCase());
+	private List<CarCharacteristics> extractCarCharacteristicsFromResultSet(ResultSet resultSet) throws SQLException {
+		List<CarCharacteristics> carCharacteristics = new ArrayList<>();
+		resultSet.beforeFirst();
+		while (resultSet.next()) {
+			carCharacteristics.add(CarCharacteristics.valueOf(resultSet.getString(CHARACTERISTIC_VALUE).toUpperCase()));
+		}
+		return carCharacteristics;
 	}
 
 }

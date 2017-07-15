@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="history" uri="historytables"%>
 
 <c:set var="lang" scope="session"
 	value="${empty sessionScope.locale ? 'en_GB' : sessionScope.locale}" />
@@ -31,7 +32,7 @@
 
 				<c:if test="${not empty user}">
 					<c:if test="${user.getRole().name().toLowerCase() eq 'client' }">
-						<li><a href="${pageContext.request.contextPath}/main/order">
+						<li><a href="${pageContext.request.contextPath}/main/ordercar">
 								<fmt:message key="taxistation.order.car" bundle="${bundle}" />
 						</a></li>
 

@@ -2,10 +2,12 @@ package ua.taxistation.controller.utilities;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ua.taxistation.controller.constants.Parameters;
 import ua.taxistation.exceptions.ServerAppException;
 
 public class RedirectionManager {
@@ -24,12 +26,6 @@ public class RedirectionManager {
 		return Holder.INSTANCE;
 	}
 
-/*	public void redirectWithParams(HttpWrapper httpWrapper, String redirectionPath, Map<String, String> urlParameters)
-			throws IOException {
-		String urlPathWithParams = generateUrlPath(httpWrapper.getRequest(), redirectionPath)
-				+ generateUrlParams(urlParameters);
-		redirect(httpWrapper.getRequest(), httpWrapper.getResponse(), urlPathWithParams);
-	}*/
 
 	public void redirect(HttpServletRequest request, HttpServletResponse response, String path) {
 		try {
@@ -43,18 +39,4 @@ public class RedirectionManager {
 		return request.getContextPath() + request.getServletPath() + path;
 	}
 
-	/*
-	 * public String generateUrlParams(Map<String, String> urlParameters) throws
-	 * UnsupportedEncodingException { StringBuffer stringBuffer = new
-	 * StringBuffer(MessageUtils.INTERROGATION_MARK); for (String urlParamName :
-	 * urlParameters.keySet()) {
-	 * stringBuffer.append(urlParamName).append(MessageUtils.EQUALITY_SIGN)
-	 * .append(URLEncoder.encode(urlParameters.get(urlParamName), MESSAGE_ENCODING))
-	 * .append(MessageUtils.AMPERSAND); } deleteLastAmpersand(stringBuffer); return
-	 * stringBuffer.toString(); }
-	 */
-
-	private void deleteLastAmpersand(StringBuffer stringBuffer) {
-		stringBuffer.deleteCharAt(stringBuffer.length() - 1);
-	}
 }

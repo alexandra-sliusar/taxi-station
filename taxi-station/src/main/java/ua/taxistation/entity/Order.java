@@ -18,7 +18,7 @@ public class Order implements Serializable {
 	}
 
 	public static class Builder {
-		protected Order order;
+		protected Order order = new Order();
 
 		public Builder() {
 		}

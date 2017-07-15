@@ -2,8 +2,12 @@ package ua.taxistation.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import ua.taxistation.entity.enums.CarCharacteristics;
@@ -18,15 +22,15 @@ public class Request implements Serializable {
 	private String pickup;
 	private String destination;
 	private LocalDateTime dateOfRequest;
-	private Set<CarCharacteristics> carCharacteristics;
+	private List<CarCharacteristics> carCharacteristics;
 	private RequestStatus requestStatus = RequestStatus.UNPROCESSED;
 
 	public Request() {
-		carCharacteristics = new HashSet<CarCharacteristics>();
+		carCharacteristics = new ArrayList<>();
 	}
 
 	public static class Builder {
-		protected Request request;
+		protected Request request = new Request();
 
 		public Builder() {
 		}
@@ -111,12 +115,16 @@ public class Request implements Serializable {
 		this.dateOfRequest = dateOfRequest;
 	}
 
-	public Set<CarCharacteristics> getCarCharacteristics() {
+	public List<CarCharacteristics> getCarCharacteristics() {
 		return carCharacteristics;
 	}
 
 	public void setCarCharacteristics(Collection<CarCharacteristics> carCharacteristics) {
 		this.carCharacteristics.addAll(carCharacteristics);
+	}
+	
+	public void addCarCharacteristic(CarCharacteristics carCharacteristics) {
+		this.carCharacteristics.add(carCharacteristics);
 	}
 
 	public RequestStatus getRequestStatus() {
@@ -164,5 +172,7 @@ public class Request implements Serializable {
 				+ ", dateOfRequest=" + dateOfRequest + ", carCharacteristics=" + carCharacteristics + ", requestStatus="
 				+ requestStatus + "]";
 	}
+
+
 
 }
