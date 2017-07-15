@@ -132,6 +132,6 @@ public class JdbcUserDao implements UserDao {
 	private User extractUserFromResultSet(ResultSet resultSet) throws SQLException {
 		return new User.Builder().setId(resultSet.getLong(ID)).setLogin(resultSet.getString(LOGIN))
 				.setPassword(resultSet.getString(PASSWORD)).setPhonenumber(resultSet.getString(PHONENUMBER))
-				.setRole(Role.valueOf(resultSet.getString(ROLE))).setSalt(resultSet.getBytes(SALT)).build();
+				.setRole(Role.valueOf(resultSet.getString(ROLE).toUpperCase())).setSalt(resultSet.getBytes(SALT)).build();
 	}
 }

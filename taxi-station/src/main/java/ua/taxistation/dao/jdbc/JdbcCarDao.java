@@ -187,13 +187,13 @@ public class JdbcCarDao implements CarDao {
 	private Car extractCarFromResultSet(ResultSet resultSet) throws SQLException {
 		Car car = new Car.Builder().setId(resultSet.getLong(ID)).setModel(resultSet.getString(MODEL))
 				.setNumber(resultSet.getString(NUMBER)).setColor(resultSet.getString(COLOR))
-				.setCarStatus(CarStatus.valueOf(resultSet.getString(STATUS)))
+				.setCarStatus(CarStatus.valueOf(resultSet.getString(STATUS).toUpperCase()))
 				.setDriver(new User.Builder().setId(resultSet.getLong(DRIVERID)).build()).build();
 		car.setCarCharacteristics(getCarCharacteristicsByCarId(car.getId()));
 		return car;
 	}
 
 	private CarCharacteristics extractCarCharacteristicFromResultSet(ResultSet resultSet) throws SQLException {
-		return CarCharacteristics.valueOf(resultSet.getString(CHARACTERISTIC_VALUE));
+		return CarCharacteristics.valueOf(resultSet.getString(CHARACTERISTIC_VALUE).toUpperCase());
 	}
 }

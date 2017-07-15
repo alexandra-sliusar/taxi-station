@@ -1,12 +1,24 @@
-body{
-  background-color: DCD1CA;
+body {
+	background-color: #DCD1CA !important;
 }
-.menu { 
-    border: 3px solid;
-  border-color: white;
-    padding: 30px;
-    background: #dddddd;
-    border-bottom-left-radius: 1em;
-    border-bottom-right-radius: 1em;
-    font: 22px Cambria;  
+
+.menu {
+	border-bottom: 1px solid;
+	border-color: black;
+	background: #dddddd;
+	border-bottom-left-radius: 0.5em;
+	border-bottom-right-radius: 0.5em;
+	font: 20px Georgia !important;
+}
+
+.lang {
+	font: 15px Georgia
+}
+
+a:link, a:visited {
+	color: black;
+}
+
+.nav {
+	padding-right: 10px;
 }

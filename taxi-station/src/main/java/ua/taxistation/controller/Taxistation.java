@@ -10,9 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import ua.taxistation.controller.command.Command;
 import ua.taxistation.controller.command.CommandFactory;
+import ua.taxistation.controller.utilities.RedirectionManager;
 import ua.taxistation.exceptions.ServerAppException;
 
-@WebServlet("/taxistation")
+@WebServlet(urlPatterns = "/main/*")
 public class Taxistation extends HttpServlet {
 
 	// private static final Logger LOGGER = Logger.getLogger(Taxistation.class);
@@ -31,17 +32,23 @@ public class Taxistation extends HttpServlet {
 
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		Command command = CommandFactory.getCommand(request);
 		try {
 			String resultPath = command.execute(request, response);
-			System.out.println(resultPath);
-			// request.getRequestDispatcher(resultPath).forward(request,
-			// response);
-			request.getRequestDispatcher("/WEB-INF/pages/allRequests.jsp").forward(request, response);
-		} catch (ServerAppException e) {
-
+			if (!resultPath.equals(RedirectionManager.REDIRECTION))
+				request.getRequestDispatcher(resultPath).forward(request, response);
+		} catch (Exception e) {
+			//redirecToHomePageWithErrorMessage(request,response, e);
 		}
-		System.out.println(request.getMethod());
-		System.out.println(request.getRequestURI());
+
 	}
+
+	// private void redirecToHomePageWithErrorMessage(HttpServletRequest request,
+	// HttpServletResponse response, ServerAppException e) throws IOException {
+	// Map<String, String> urlParams = new HashMap<>();
+	// urlParams.put(Attribute.ERROR, ex.getMessage());
+	// RedirectionManager.getInstance().redirectWithParams(httpWrapper,
+	// ServletPath.HOME, urlParams);
+	// }
 }

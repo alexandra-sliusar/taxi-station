@@ -1,17 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
-<fmt:setLocale
-	value="${empty sessionScope.locale ? 'en_US' : sessionScope.locale}"
-	scope="session" />
-<fmt:setBundle basename="/i18n/messages" var="bundle" scope="session" />
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
 <%@ include file="/WEB-INF/pages/addon/header.jsp"%>
-<div class="container" align="center" style="width: 300px;">
-	<h3>Hello from inside</h3>
+<div class="container-fluid" align="center">
+	<h2><fmt:message key="taxistation.welcome" bundle="${bundle}" /></h2>
+	<h4><fmt:message key="taxistation.welcome.text" bundle="${bundle}" /></h4>
 </div>
 </body>
 </html>

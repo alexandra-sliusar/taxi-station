@@ -187,14 +187,14 @@ public class JdbcRequestDao implements RequestDao {
 		Request request = new Request.Builder().setId(resultSet.getLong(ID))
 				.setUser(new User.Builder().setId(resultSet.getLong(USERID)).build())
 				.setPickup(resultSet.getString(PICKUP)).setDestination(resultSet.getString(DESTINATION))
-				.setRequestStatus(RequestStatus.valueOf(resultSet.getString(STATUS)))
+				.setRequestStatus(RequestStatus.valueOf(resultSet.getString(STATUS).toUpperCase()))
 				.setDateOfRequest(resultSet.getTimestamp(DATE_OF_REQUEST).toLocalDateTime()).build();
 		request.setCarCharacteristics(getCarCharacteristicsByRequestId(request.getId()));
 		return request;
 	}
 
 	private CarCharacteristics extractCarCharacteristicFromResultSet(ResultSet resultSet) throws SQLException {
-		return CarCharacteristics.valueOf(resultSet.getString(CHARACTERISTIC_VALUE));
+		return CarCharacteristics.valueOf(resultSet.getString(CHARACTERISTIC_VALUE).toUpperCase());
 	}
 
 }

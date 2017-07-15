@@ -31,23 +31,17 @@ public class UserService {
 		return Holder.INSTANCE;
 	}
 
-	public User signUpUser(CredentialsDto credentials, String passwordConfirm) throws ServerAppException {
+	public User signUpUser(CredentialsDto credentials) throws ServerAppException {
 		String login = credentials.getLogin();
 		String password = credentials.getPassword();
 		String phonenumber = credentials.getPhonenumber();
 
-		try (DaoConnection connection = daoFactory.getConnection()) {
-			connection.begin();
-			UserDao userDao = daoFactory.createUserDao(connection);
-
+		try (UserDao userDao = daoFactory.createUserDao()) {
 			Optional<User> optionalUser = userDao.getUserByLogin(login);
 			isNotUserSignedUp(optionalUser);
-
 			User user = new User.Builder().setLogin(login).setRole(Role.CLIENT).setPhonenumber(phonenumber).build();
 			hashUserPassword(user, password);
-			userDao.create(user);
-			connection.commit();
-
+			userDao.create(user);	
 			return user;
 		} catch (Exception e) {
 			LOGGER.error("Signing up user " + login + " has failed", e);

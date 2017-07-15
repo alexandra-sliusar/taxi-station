@@ -180,6 +180,6 @@ public class JdbcOrderDao implements OrderDao {
 		return new Order.Builder().setId(resultSet.getLong(ID))
 				.setCar(new Car.Builder().setId(resultSet.getLong(CAR_ID)).build())
 				.setRequest(new Request.Builder().setId(resultSet.getLong(REQUEST_ID)).build())
-				.setOrderStatus(OrderStatus.valueOf(resultSet.getString(STATUS))).build();
+				.setOrderStatus(OrderStatus.valueOf(resultSet.getString(STATUS).toUpperCase())).build();
 	}
 }

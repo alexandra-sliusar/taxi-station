@@ -10,7 +10,7 @@ public class User implements Serializable {
 
 	private Long id;
 	private String login;
-	private String password;
+	private String password = "";
 	private String phonenumber;
 	private Role role;
 	private byte[] salt;
@@ -20,38 +20,39 @@ public class User implements Serializable {
 	}
 
 	public static class Builder {
-		protected User user;
+		protected User user = new User();
 
 		public Builder() {
 		}
 
 		public Builder setId(Long id) {
-			user.id = id;
+			user.setId(id);
 			return this;
 		}
 
 		public Builder setLogin(String login) {
-			user.login = login;
+			System.out.println(login);
+			user.setLogin(login);
 			return this;
 		}
 
 		public Builder setPassword(String password) {
-			user.password = password;
+			user.setPassword(password);
 			return this;
 		}
 
 		public Builder setPhonenumber(String phonenumber) {
-			user.phonenumber = phonenumber;
+			user.setPhonenumber(phonenumber);
 			return this;
 		}
 
 		public Builder setRole(Role role) {
-			user.role = role;
+			user.setRole(role);
 			return this;
 		}
 
 		public Builder setSalt(byte[] salt) {
-			user.salt = salt;
+			user.setSalt(salt);
 			return this;
 		}
 
