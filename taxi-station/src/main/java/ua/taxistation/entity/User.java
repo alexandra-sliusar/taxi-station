@@ -31,7 +31,6 @@ public class User implements Serializable {
 		}
 
 		public Builder setLogin(String login) {
-			System.out.println(login);
 			user.setLogin(login);
 			return this;
 		}

@@ -12,6 +12,7 @@ import ua.taxistation.dao.DaoConnection;
 import ua.taxistation.dao.DaoFactory;
 import ua.taxistation.dao.OrderDao;
 import ua.taxistation.dao.RequestDao;
+import ua.taxistation.dao.UserDao;
 import ua.taxistation.entity.Car;
 import ua.taxistation.entity.Order;
 import ua.taxistation.entity.Request;
@@ -52,23 +53,47 @@ public class OrderService {
 			connection.begin();
 			OrderDao orderDao = daoFactory.createOrderDao(connection);
 			RequestDao requestDao = daoFactory.createRequestDao(connection);
+			UserDao userDao = daoFactory.createUserDao(connection);
 			CarDao carDao = daoFactory.createCarDao(connection);
 			orders.addAll(orderDao.getOrdersByUserId(user.getId()));
-			for (Order order: orders)
-			{
+			for (Order order : orders) {
 				order.setRequest(requestDao.getById(order.getRequest().getId()).get());
+				order.getRequest().setUser(userDao.getById(user.getId()).get());
 				order.setCar(carDao.getById(order.getCar().getId()).get());
 			}
 		}
 		return orders;
 	}
 
-	public Order createOrder(Request request, Car car) {
+	public List<Order> getOrdersByDriver(User user) {
+		List<Order> orders = new ArrayList<>();
+		try (DaoConnection connection = daoFactory.getConnection()) {
+			connection.begin();
+			OrderDao orderDao = daoFactory.createOrderDao(connection);
+			RequestDao requestDao = daoFactory.createRequestDao(connection);
+			UserDao userDao = daoFactory.createUserDao(connection);
+			CarDao carDao = daoFactory.createCarDao(connection);
+
+			orders.addAll(orderDao.getOrdersByDriverId(user.getId()));
+			for (Order order : orders) {
+				order.setRequest(requestDao.getById(order.getRequest().getId()).get());
+				order.getRequest().setUser(userDao.getById(order.getRequest().getUser().getId()).get());
+				order.setCar(carDao.getById(order.getCar().getId()).get());
+			}
+		}
+		return orders;
+	}
+
+	public Order createOrder(Long requestId, Long carId) {
 		try (DaoConnection connection = daoFactory.getConnection()) {
 			connection.begin();
 			OrderDao orderDao = daoFactory.createOrderDao(connection);
 			RequestDao requestDao = daoFactory.createRequestDao(connection);
 			CarDao carDao = daoFactory.createCarDao(connection);
+			Car car = carDao.getById(carId).get();
+			isCarNotAvailable(car);
+			Request request = requestDao.getById(requestId).get();
+			isRequestNotProcessed(request);
 			Order order = new Order.Builder().setCar(car).setRequest(request).setOrderStatus(OrderStatus.INCOMPLETE)
 					.build();
 			orderDao.create(order);
@@ -78,6 +103,9 @@ public class OrderService {
 			carDao.update(car);
 			connection.commit();
 			return order;
+		} catch (Exception e) {
+			LOGGER.error("Order addition has been failed", e);
+			throw new ServerAppException("Order addition has been failed");
 		}
 	}
 
@@ -95,19 +123,31 @@ public class OrderService {
 		}
 	}
 
-	public Order getLastCarOrder(Car car) {
-		try (OrderDao orderDao = daoFactory.createOrderDao()) {
+	public Optional<Order> getLastCarOrder(Car car) {
+		try (DaoConnection connection = daoFactory.getConnection()) {
+			connection.begin();
+			OrderDao orderDao = daoFactory.createOrderDao(connection);
+			RequestDao requestDao = daoFactory.createRequestDao(connection);
 			Optional<Order> order = orderDao.getLastCarOrder(car.getId());
-			isOrderExist(order);
-			return order.get();
+			if (order.isPresent()) {
+				order.get().setRequest(requestDao.getById(order.get().getRequest().getId()).get());
+			}
+			connection.commit();
+			return order;
 		} catch (Exception e) {
 			LOGGER.error("Getting last order of car " + car.getId() + " has failed", e);
 			throw new ServerAppException("Getting last order of car " + car.getId() + " has failed");
 		}
 	}
 
-	private void isOrderExist(Optional<Order> order) throws ServerAppException {
-		if (!order.isPresent())
-			throw new ServerAppException("Order doesn`t exist");
+	private void isCarNotAvailable(Car car) throws ServerAppException {
+		if (car.getCarStatus() != CarStatus.AVAILABLE)
+			throw new ServerAppException("Car is not available");
 	}
+
+	private void isRequestNotProcessed(Request request) throws ServerAppException {
+		if (request.getRequestStatus() != RequestStatus.UNPROCESSED)
+			throw new ServerAppException("Request is processed already");
+	}
+
 }

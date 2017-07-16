@@ -2,13 +2,16 @@ package ua.taxistation.controller.utilities;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import ua.taxistation.controller.constants.Parameters;
 import ua.taxistation.exceptions.ServerAppException;
+import ua.taxistation.utilities.LocaleManager;
 
 public class RedirectionManager {
 
@@ -26,7 +29,6 @@ public class RedirectionManager {
 		return Holder.INSTANCE;
 	}
 
-
 	public void redirect(HttpServletRequest request, HttpServletResponse response, String path) {
 		try {
 			response.sendRedirect(generateUrlPath(request, path));
@@ -39,4 +41,20 @@ public class RedirectionManager {
 		return request.getContextPath() + request.getServletPath() + path;
 	}
 
+	public void redirectWithMessages(HttpServletRequest request, HttpServletResponse response, String redirectionPath,
+			Map<String, String> parameters) throws IOException {
+		String resultPath = redirectionPath + generateUrlParameters(parameters);
+		redirect(request, response, resultPath);
+	}
+
+	public String generateUrlParameters(Map<String, String> parameters) throws UnsupportedEncodingException {
+		StringBuffer stringBuffer = new StringBuffer(Parameters.QUESTION_MARK);
+		for (String parameterName : parameters.keySet()) {
+			stringBuffer.append(parameterName).append(Parameters.EQUALITY_SIGN)
+					.append(URLEncoder.encode(parameters.get(parameterName), MESSAGE_ENCODING))
+					.append(Parameters.AMPERSAND);
+		}
+		stringBuffer.deleteCharAt(stringBuffer.length() - 1);
+		return stringBuffer.toString();
+	}
 }

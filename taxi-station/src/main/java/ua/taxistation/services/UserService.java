@@ -6,7 +6,6 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import ua.taxistation.controller.dto.CredentialsDto;
-import ua.taxistation.dao.DaoConnection;
 import ua.taxistation.dao.DaoFactory;
 import ua.taxistation.dao.UserDao;
 import ua.taxistation.entity.User;

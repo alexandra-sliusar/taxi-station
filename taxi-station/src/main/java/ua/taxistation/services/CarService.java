@@ -1,8 +1,10 @@
 package ua.taxistation.services;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -10,6 +12,7 @@ import org.apache.log4j.Logger;
 import ua.taxistation.dao.CarDao;
 import ua.taxistation.dao.DaoConnection;
 import ua.taxistation.dao.DaoFactory;
+import ua.taxistation.dao.UserDao;
 import ua.taxistation.entity.Car;
 import ua.taxistation.entity.enums.CarCharacteristics;
 import ua.taxistation.entity.enums.CarStatus;
@@ -33,17 +36,15 @@ public class CarService {
 	}
 
 	public List<Car> getCarsByCharacteristics(List<CarCharacteristics> characteristics) {
-		List<Car> cars = new ArrayList<>();
-		try (DaoConnection connection = daoFactory.getConnection()) {
-			connection.begin();
-			CarDao carDao = daoFactory.createCarDao(connection);
+		Set<Car> cars = new HashSet<>();
+		try (CarDao carDao = daoFactory.createCarDao()) {
 			cars.addAll(carDao.getAll());
 			for (CarCharacteristics carCharacteristic : characteristics) {
 				cars.retainAll(carDao.getCarsByCharacteristicAndStatus(carCharacteristic, CarStatus.AVAILABLE));
 			}
-			connection.commit();
+
 		}
-		return cars;
+		return new ArrayList<Car>(cars);
 	}
 
 	public Car updateCarStatus(Car car) {
@@ -67,6 +68,22 @@ public class CarService {
 		} catch (Exception e) {
 			LOGGER.error("Getting car by driver id " + driverId + " has failed", e);
 			throw new ServerAppException("Getting car by driver id " + driverId + " has failed");
+		}
+	}
+
+	public List<Car> getAllCars() {
+		try (DaoConnection connection = daoFactory.getConnection()) {
+			CarDao carDao = daoFactory.createCarDao(connection);
+			UserDao userDao = daoFactory.createUserDao(connection);
+			Set<Car> cars = new HashSet<>();
+			cars.addAll(carDao.getAll());
+			for (Car car : cars) {
+				car.setDriver(userDao.getById(car.getDriver().getId()).get());
+			}
+			return new ArrayList<Car>(cars);
+		} catch (Exception e) {
+			LOGGER.error("Getting all cars has failed", e);
+			throw new ServerAppException("Getting all cars has failed");
 		}
 	}
 

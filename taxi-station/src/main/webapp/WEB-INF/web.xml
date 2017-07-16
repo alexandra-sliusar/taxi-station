@@ -9,7 +9,7 @@
 	</session-config>
 	<jsp-config>
 		<taglib>
-			<taglib-uri>historytables</taglib-uri>
+			<taglib-uri>historyTables</taglib-uri>
 			<taglib-location>/WEB-INF/tld/historyTables.tld</taglib-location>
 		</taglib>
 	</jsp-config>

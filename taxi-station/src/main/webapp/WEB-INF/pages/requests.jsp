@@ -1,12 +1,12 @@
 <%@ include file="/WEB-INF/pages/addon/header.jsp"%>
 <div class="container-fluid" align="center">
-	<h2>
-		<fmt:message key="taxistation.welcome" bundle="${bundle}" />
-	</h2>
-	<h4>
-		<fmt:message key="taxistation.welcome.text" bundle="${bundle}" />
-	</h4>
-	
+
+	<div class="row-fluid pg-title">
+		<h3>
+			<fmt:message key="taxistation.requests.title" bundle="${bundle}" />
+		</h3>
+	</div>
+
 	<div class="row">
 		<c:if test="${not empty success}">
 			<div class="alert alert-success" role="alert">
@@ -21,6 +21,7 @@
 					<p>${error}</p>
 				</div>
 			</c:if>
+		<history:request-history requestList="${requestList}"></history:request-history>
 	</div>
 </div>
 </body>

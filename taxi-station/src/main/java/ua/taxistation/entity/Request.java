@@ -107,8 +107,8 @@ public class Request implements Serializable {
 		this.destination = destination;
 	}
 
-	public LocalDateTime getDateOfRequest() {
-		return dateOfRequest;
+	public String getDateOfRequest() {
+		return dateOfRequest.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
 	}
 
 	public void setDateOfRequest(LocalDateTime dateOfRequest) {
@@ -122,9 +122,9 @@ public class Request implements Serializable {
 	public void setCarCharacteristics(Collection<CarCharacteristics> carCharacteristics) {
 		this.carCharacteristics.addAll(carCharacteristics);
 	}
-	
-	public void addCarCharacteristic(CarCharacteristics carCharacteristics) {
-		this.carCharacteristics.add(carCharacteristics);
+
+	public boolean addCarCharacteristic(CarCharacteristics carCharacteristics) {
+		return this.carCharacteristics.add(carCharacteristics);
 	}
 
 	public RequestStatus getRequestStatus() {
@@ -172,7 +172,5 @@ public class Request implements Serializable {
 				+ ", dateOfRequest=" + dateOfRequest + ", carCharacteristics=" + carCharacteristics + ", requestStatus="
 				+ requestStatus + "]";
 	}
-
-
 
 }

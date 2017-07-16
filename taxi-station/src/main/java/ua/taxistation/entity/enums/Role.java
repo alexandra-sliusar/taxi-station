@@ -1,15 +1,15 @@
 package ua.taxistation.entity.enums;
 
 public enum Role {
-	CLIENT(""/* Message.ROLE_LIBRARIAN */), DISPATCHER(""), DRIVER("");
+	CLIENT("enum.role.client"), DISPATCHER("enum.role.dispatcher"), DRIVER("enum.role.driver");
 
-	private String localizedValue;
+	private String localeKey;
 
-	Role(String localizedValue) {
-		this.localizedValue = localizedValue;
+	Role(String localeKey) {
+		this.localeKey = localeKey;
 	}
 
-	public String getLocalizedValue() {
-		return localizedValue;
+	public String getLocaleKey() {
+		return localeKey;
 	}
 }

@@ -32,8 +32,11 @@ public class JdbcOrderDao implements OrderDao {
 	private static String SELECT_ORDER_BY_USER_ID = "SELECT orders.id, orders.request_id, orders.car_id, orders.status "
 			+ "FROM orders,requests WHERE requests.id = orders.request_id AND requests.user_id = ?";
 
+	private static String SELECT_ORDER_BY_DRIVER_ID = "SELECT orders.id, orders.request_id, orders.car_id, orders.status "
+			+ "FROM orders,cars WHERE cars.id = orders.car_id AND cars.driver_id = ?";
+
 	private static String SELECT_LAST_ORDER_BY_CAR_ID = "SELECT orders.id, orders.request_id, orders.car_id, orders.status "
-			+ "FROM orders WHERE car_id = ? limit 1";
+			+ "FROM orders WHERE car_id = ? AND orders.status = ? limit 1";
 
 	private static String UPDATE_ORDER = "UPDATE orders SET status = ? where id = ?";
 
@@ -138,6 +141,7 @@ public class JdbcOrderDao implements OrderDao {
 		Optional<Order> order = Optional.empty();
 		try (PreparedStatement query = connection.prepareStatement(SELECT_LAST_ORDER_BY_CAR_ID)) {
 			query.setLong(1, carId);
+			query.setString(2, OrderStatus.INCOMPLETE.name().toLowerCase());
 			ResultSet resultSet = query.executeQuery();
 			if (resultSet.next()) {
 				order = Optional.of(extractOrderFromResultSet(resultSet));
@@ -181,5 +185,21 @@ public class JdbcOrderDao implements OrderDao {
 				.setCar(new Car.Builder().setId(resultSet.getLong(CAR_ID)).build())
 				.setRequest(new Request.Builder().setId(resultSet.getLong(REQUEST_ID)).build())
 				.setOrderStatus(OrderStatus.valueOf(resultSet.getString(STATUS).toUpperCase())).build();
+	}
+
+	@Override
+	public List<Order> getOrdersByDriverId(Long userId) {
+		List<Order> orders = new ArrayList<>();
+		try (PreparedStatement query = connection.prepareStatement(SELECT_ORDER_BY_DRIVER_ID)) {
+			query.setLong(1, userId);
+			ResultSet resultSet = query.executeQuery();
+			while (resultSet.next()) {
+				orders.add(extractOrderFromResultSet(resultSet));
+			}
+		} catch (SQLException e) {
+			LOGGER.error("JdbcOrderDao getByUserId SQL failed: " + userId, e);
+			throw new ServerAppException(e);
+		}
+		return orders;
 	}
 }

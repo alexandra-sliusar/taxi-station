@@ -3,7 +3,6 @@ package ua.taxistation.controller.command;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 import javax.servlet.http.HttpServletRequest;
 
 import ua.taxistation.controller.command.realization.ChangeLocaleCommand;
@@ -13,8 +12,20 @@ import ua.taxistation.controller.command.realization.authorization.GetSignupComm
 import ua.taxistation.controller.command.realization.authorization.LogoutCommand;
 import ua.taxistation.controller.command.realization.authorization.PostLoginCommand;
 import ua.taxistation.controller.command.realization.authorization.PostSignupCommand;
+import ua.taxistation.controller.command.realization.client.ClientHistoryCommand;
 import ua.taxistation.controller.command.realization.client.GetOrderCarCommand;
 import ua.taxistation.controller.command.realization.client.PostOrderCarCommand;
+import ua.taxistation.controller.command.realization.dispatcher.GetAllCarsCommand;
+import ua.taxistation.controller.command.realization.dispatcher.GetAllRequestsCommand;
+import ua.taxistation.controller.command.realization.dispatcher.GetRequestCommand;
+import ua.taxistation.controller.command.realization.dispatcher.PostRequestCommand;
+import ua.taxistation.controller.command.realization.dispatcher.RejectRequestCommand;
+import ua.taxistation.controller.command.realization.driver.ChangeCarStatusCommand;
+import ua.taxistation.controller.command.realization.driver.ChangeOrderStatusCommand;
+import ua.taxistation.controller.command.realization.driver.DriverHistoryCommand;
+import ua.taxistation.controller.command.realization.driver.ProfileCommand;
+import ua.taxistation.services.CarService;
+import ua.taxistation.services.OrderService;
 import ua.taxistation.services.RequestService;
 import ua.taxistation.services.UserService;
 
@@ -37,6 +48,18 @@ public class CommandFactory {
 		commands.put("GET:logout", new LogoutCommand());
 		commands.put("GET:ordercar", new GetOrderCarCommand());
 		commands.put("POST:ordercar", new PostOrderCarCommand(RequestService.getInstance()));
+		commands.put("GET:requests", new GetAllRequestsCommand(RequestService.getInstance()));
+		commands.put("GET:requests/request",
+				new GetRequestCommand(RequestService.getInstance(), CarService.getInstance()));
+		commands.put("POST:requests/request/submit", new PostRequestCommand(OrderService.getInstance()));
+		commands.put("POST:requests/request/reject", new RejectRequestCommand(RequestService.getInstance()));
+		commands.put("GET:cars", new GetAllCarsCommand(CarService.getInstance()));
+		commands.put("GET:client/history", new ClientHistoryCommand(OrderService.getInstance()));
+		commands.put("GET:driver/history", new DriverHistoryCommand(OrderService.getInstance()));
+		commands.put("GET:profile", new ProfileCommand(CarService.getInstance(), OrderService.getInstance()));
+		commands.put("POST:profile/changeCarStatus", new ChangeCarStatusCommand(CarService.getInstance(), OrderService.getInstance()));
+		commands.put("POST:profile/changeOrderStatus",
+				new ChangeOrderStatusCommand(OrderService.getInstance(), CarService.getInstance()));
 	}
 
 	public static Command getCommand(HttpServletRequest request) {
@@ -49,6 +72,7 @@ public class CommandFactory {
 		String method = request.getMethod().toUpperCase();
 		String path = request.getRequestURI().replaceAll(INDEX_PATH, REPLACEMENT).replaceAll(ID, REPLACEMENT);
 		String key = method + DELIMITER + path;
+		System.out.println(key);
 		return key;
 	}
 }

@@ -21,7 +21,7 @@ import ua.taxistation.exceptions.ServerAppException;
 public class JdbcCarDao implements CarDao {
 
 	private static String SELECT_ALL_CARS = "SELECT cars.id, cars.driver_id, cars.number, cars.model, "
-			+ "cars.color, cars.status, car_characteristics.value FROM cars, m2m_cars_characteristics, car_characteristics"
+			+ "cars.color, cars.status, car_characteristics.value FROM cars, m2m_cars_characteristics, car_characteristics "
 			+ "WHERE m2m_cars_characteristics.car_id = cars.id "
 			+ "AND m2m_cars_characteristics.characteristic_id = car_characteristics.id";
 
@@ -111,6 +111,8 @@ public class JdbcCarDao implements CarDao {
 					car.addCarCharacteristic(
 							CarCharacteristics.valueOf(resultSet.getString(CHARACTERISTIC_VALUE).toUpperCase()));
 				}
+				if (car.getId() != null)
+					cars.add(car);
 			}
 		} catch (SQLException e) {
 			LOGGER.error("JdbcCarDao getAll SQL failed", e);

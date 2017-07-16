@@ -4,20 +4,52 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd">
 	<tlib-version>1.0</tlib-version>
 	<short-name>history</short-name>
-	<uri>historytables</uri>
-	<tag>
+	<uri>historyTables</uri>
+	<tag-file>
 		<name>user-history</name>
-		<path>/WEB-INF/tld/userhistory.tag</path>
-	</tag>
-	
-	<!-- tag>
-		<name>driver-history</name>
-		<tag-class>ua.training.tag.DriverHistoryTag</tag-class>
+		<path>/WEB-INF/tags/userhistory.tag</path>
+	</tag-file>
+
+
+<tag>
+		<name>request-history</name>
+		<tag-class>ua.taxistation.tags.RequestsHistoryTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
-			<name>user</name>
+			<name>requestList</name>
 			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
-	</tag-->
+</tag>
+
+<tag>
+		<name>all-cars</name>
+		<tag-class>ua.taxistation.tags.AllCarsTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<name>carList</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+</tag>
+<tag>
+		<name>client-orders</name>
+		<tag-class>ua.taxistation.tags.ClientOrderHistoryTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<name>orderList</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+</tag>
+<tag>
+		<name>driver-orders</name>
+		<tag-class>ua.taxistation.tags.DriverOrderHistoryTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<name>orderList</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+</tag>
 </taglib>

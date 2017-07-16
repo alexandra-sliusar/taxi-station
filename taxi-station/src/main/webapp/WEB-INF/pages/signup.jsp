@@ -11,8 +11,6 @@
 		<div class="col-sm-6 col-sm-offset-3 ">
 			<form action="./signup" method="POST" role="form">
 
-
-
 				<c:if test="${not empty requestScope.errors}">
 					<div class="alert alert-danger" role="alert">
 						<span class="glyphicon glyphicon-exclamation-sign"

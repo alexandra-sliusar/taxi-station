@@ -25,4 +25,13 @@ public class Parameters {
 	public static String CARCHAR_WIFI = "carchar_wifi";
 	public static String CARCHAR_PREMIUM = "carchar_premium";
 	public static String SUCCESS = "success";
+	public static String REQUEST_LIST = "requestList";
+	public static String CAR_LIST = "carList";
+	public static String ORDER_LIST = "orderList";
+	public static String CARS = "cars";
+	public static String REQUEST_ID = "req_id";
+	public static String CAR_AVAILABLE = "car_available";
+	public static String CAR = "car";
+	public static String ORDER = "order";
+	public static String CAR_STATUS = "car_status";
 }

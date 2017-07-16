@@ -3,6 +3,7 @@ package ua.taxistation.services;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import ua.taxistation.controller.dto.RequestDto;
@@ -32,13 +33,18 @@ public class RequestService {
 
 	public List<Request> getUnprocessedRequests() {
 		List<Request> requests = new ArrayList<>();
-		try (DaoConnection connection = daoFactory.getConnection()) {
-			connection.begin();
-			RequestDao requestDao = daoFactory.createRequestDao(connection);
+		try (RequestDao requestDao = daoFactory.createRequestDao()) {
 			requests.addAll(requestDao.getRequestsByStatus(RequestStatus.UNPROCESSED));
-			connection.commit();
 		}
 		return requests;
+	}
+	
+	public Request getRequestById(Long id) {
+		Optional<Request> optionalRequest = Optional.empty();
+		try (RequestDao requestDao = daoFactory.createRequestDao()) {
+			optionalRequest = requestDao.getById(id);
+		}
+		return optionalRequest.get();
 	}
 
 	public void updateRequestStatus(Request request) {

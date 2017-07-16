@@ -9,4 +9,11 @@ public class Page {
 	public static String LOGIN_PAGE = PREFIX + "login" + SUFFIX;
 	public static String SIGNUP_PAGE = PREFIX + "signup" + SUFFIX;
 	public static String ORDERCAR_PAGE = PREFIX + "ordercar" + SUFFIX;
+	public static String REQUESTS_PAGE = PREFIX + "requests" + SUFFIX;
+	public static String REQUEST_PAGE = PREFIX + "request" + SUFFIX;
+	public static String CARS_PAGE = PREFIX + "cars" + SUFFIX;
+	public static String HISTORY_PAGE = PREFIX + "history" + SUFFIX;
+	public static String PROFILE_PAGE = PREFIX + "profile" + SUFFIX;
+	public static String PROFILE_PAGE_TO_REDIRECT = "/profile";
+
 }

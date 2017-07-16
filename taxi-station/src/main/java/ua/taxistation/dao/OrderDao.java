@@ -11,6 +11,8 @@ public interface OrderDao extends GenericDao<Order>, AutoCloseable {
 	public List<Order> getOrdersByStatus(OrderStatus orderStatus);
 
 	public List<Order> getOrdersByUserId(Long userId);
+	
+	public List<Order> getOrdersByDriverId(Long userId);
 
 	public Optional<Order> getLastCarOrder(Long carId);
 

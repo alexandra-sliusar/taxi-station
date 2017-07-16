@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="history" uri="historytables"%>
+<%@ taglib prefix="history" uri="historyTables"%>
 
 <c:set var="lang" scope="session"
 	value="${empty sessionScope.locale ? 'en_GB' : sessionScope.locale}" />
@@ -32,13 +32,12 @@
 
 				<c:if test="${not empty user}">
 					<c:if test="${user.getRole().name().toLowerCase() eq 'client' }">
-						<li><a href="${pageContext.request.contextPath}/main/ordercar">
-								<fmt:message key="taxistation.order.car" bundle="${bundle}" />
+						<li><a
+							href="${pageContext.request.contextPath}/main/ordercar"> <fmt:message
+									key="taxistation.order.car" bundle="${bundle}" />
 						</a></li>
 
-						<li><a
-							href="${pageContext.request.contextPath}/main/
-							${user.getRole().name().toLowerCase()}/history">
+						<li><a href="${pageContext.request.contextPath}/main/client/history">
 								<fmt:message key="taxistation.history" bundle="${bundle}" />
 						</a></li>
 
@@ -46,9 +45,7 @@
 					<c:if test="${user.getRole().name().toLowerCase() eq 'driver' }">
 						<li><a href="${pageContext.request.contextPath}/main/profile"><fmt:message
 									key="taxistation.car.profile" bundle="${bundle}" /></a></li>
-						<li><a
-							href="${pageContext.request.contextPath}/main/
-							${user.getRole().name().toLowerCase()}/history">
+						<li><a href="${pageContext.request.contextPath}/main/driver/history">
 								<fmt:message key="taxistation.history" bundle="${bundle}" />
 						</a></li>
 					</c:if>

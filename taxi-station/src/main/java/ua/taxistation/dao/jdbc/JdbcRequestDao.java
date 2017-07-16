@@ -166,20 +166,27 @@ public class JdbcRequestDao implements RequestDao {
 			Request request = new Request();
 			boolean ifFirstRequest = true;
 			while (resultSet.next()) {
-				if (!last_request_id.equals(resultSet.getString(ID))) {
-					if (!ifFirstRequest)
+				if (!last_request_id.equals(resultSet.getLong(ID))) {
+
+					if (!ifFirstRequest) {
 						requests.add(request);
-					else
+					} else {
 						ifFirstRequest = false;
+					}
+
 					request = extractRequestFromResultSet(resultSet);
 					request.addCarCharacteristic(
 							CarCharacteristics.valueOf(resultSet.getString(CHARACTERISTIC_VALUE).toUpperCase()));
 					last_request_id = request.getId();
+
 				} else {
+
 					request.addCarCharacteristic(
 							CarCharacteristics.valueOf(resultSet.getString(CHARACTERISTIC_VALUE).toUpperCase()));
 				}
 			}
+			if (request.getId() != null)
+				requests.add(request);
 		} catch (SQLException e) {
 			LOGGER.error("JdbcRequestDao getByStatus SQL failed", e);
 			throw new ServerAppException(e);
