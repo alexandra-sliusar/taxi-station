@@ -10,6 +10,10 @@ import org.apache.log4j.Logger;
 
 import ua.taxistation.exceptions.ServerAppException;
 
+/**
+ * Сlass to hash password with random salt using
+ * Salt is storing in db users table 
+ */
 public class PasswordHashing {
 	private static final Logger LOGGER = LogManager.getLogger(PasswordHashing.class);
 

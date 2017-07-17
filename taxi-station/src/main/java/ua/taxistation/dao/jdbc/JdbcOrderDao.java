@@ -40,6 +40,7 @@ public class JdbcOrderDao implements OrderDao {
 
 	private static String UPDATE_ORDER = "UPDATE orders SET status = ? where id = ?";
 
+	//order fields
 	private static String ID = "orders.id";
 	private static String REQUEST_ID = "orders.request_id";
 	private static String CAR_ID = "orders.car_id";

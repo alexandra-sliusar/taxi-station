@@ -1,6 +1,11 @@
 package ua.taxistation.tags;
 
 public class TagConstants {
+	
+	/**
+	 * constant tags that are used to create info tables
+	 */
+	
 	public static String tableStartTag = "<table class=\"table\">";
 	public static String tableEndTag = "</table>";
 	public static String tableHeadStartTag = "<thead>";

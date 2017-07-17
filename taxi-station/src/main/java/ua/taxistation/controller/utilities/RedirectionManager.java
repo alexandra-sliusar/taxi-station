@@ -14,6 +14,10 @@ import ua.taxistation.exceptions.ServerAppException;
 import ua.taxistation.utilities.LocaleManager;
 
 public class RedirectionManager {
+	/**
+	 * class contains methods for correct redirection with specific messages of without
+	 * @method generateUrlParameters - adding parameters to url in format ?name1=value1&name2=value2
+	 */
 
 	public static String REDIRECTION = "REDIRECTION";
 	private static String MESSAGE_ENCODING = "UTF-8";

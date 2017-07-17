@@ -26,6 +26,7 @@ public class JdbcUserDao implements UserDao {
 
 	private static String CREATE_USER = "INSERT INTO users(login, password, phone_number, role, salt) values (?, ?, ?, ?, ?)";
 
+	//user fields
 	private static String ID = "id";
 	private static String LOGIN = "login";
 	private static String PASSWORD = "password";

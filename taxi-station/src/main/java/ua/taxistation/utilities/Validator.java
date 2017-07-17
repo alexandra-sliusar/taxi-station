@@ -1,10 +1,25 @@
 package ua.taxistation.utilities;
 
 public final class Validator {
+	/** matches:
+	 *  Ak_043_fj@9-.Ajd1.com 
+	 */
 	private static final String LOGIN_EMAIL_REGEX = "^([_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@"
 			+ "[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*(\\.[a-zA-Z]{2,6}))?$";
+	/** matches:
+	 * 00249Acc 
+	 * aCNMK8KV
+	 * mdowANFIFS1123
+	 */
 	private static final String PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{5,20}$";
-	private static final String ADDRESS_REGEX = "^([A-Za-z0-9\\.,/\\s]){3,}[A-Za-z0-9\\.,/\\s]+";
+	/** matches:
+	 * Mkfe., fawf, 123
+	 * Ул. Лондонская, 24/7
+	 * */
+	private static final String ADDRESS_REGEX = "^([A-ZА-Яa-zа-я0-9\\.,/\\s]){3,}[A-ZА-Яa-zа-я0-9\\.,/\\s]+";
+	/** matches:
+	 *  (XXX) XXX-XX-XX 
+	 */
 	private static final String PHONE_NUMBER_REGEX = "^\\(\\d{3}\\)\\s\\d{3}-\\d{2}-\\d{2}$";
 
 	private static class Holder {

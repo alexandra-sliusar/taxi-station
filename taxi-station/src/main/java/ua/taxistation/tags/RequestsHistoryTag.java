@@ -9,9 +9,13 @@ import javax.servlet.jsp.tagext.TagSupport;
 import ua.taxistation.entity.Request;
 import ua.taxistation.entity.enums.CarCharacteristics;
 import ua.taxistation.utilities.LocaleManager;
+import ua.taxistation.utilities.LocaleMessage;
 
-@SuppressWarnings("serial")
 public class RequestsHistoryTag extends TagSupport {
+	/**
+	 * java tag class to output list of unprocessed request to dispatcher
+	 */
+	private static final long serialVersionUID = -8502435357979179441L;
 	private List<Request> requestList;
 
 	public void setRequestList(List<Request> requestList) {
@@ -31,13 +35,13 @@ public class RequestsHistoryTag extends TagSupport {
 	private String showUserData() {
 		StringBuffer sb = new StringBuffer()
 				.append(TagConstants.tableStartTag + TagConstants.tableHeadStartTag + TagConstants.tableRowStartTag)
-				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.BUNDLE.getString(LocaleManager.ID)
+				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.getString(LocaleMessage.ID)
 						+ TagConstants.tableHeaderCellEndTag)
-				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.BUNDLE.getString(LocaleManager.PICKUP)
+				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.getString(LocaleMessage.PICKUP)
 						+ TagConstants.tableHeaderCellEndTag)
-				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.BUNDLE.getString(LocaleManager.DESTINATION)
+				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.getString(LocaleMessage.DESTINATION)
 						+ TagConstants.tableHeaderCellEndTag)
-				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.BUNDLE.getString(LocaleManager.DATE)
+				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.getString(LocaleMessage.DATE)
 						+ TagConstants.tableHeaderCellEndTag)
 
 				.append(TagConstants.tableRowEndTag).append(TagConstants.tableHeadEndTag)
@@ -53,7 +57,7 @@ public class RequestsHistoryTag extends TagSupport {
 					.append(TagConstants.tableCellStartTag + request.getDateOfRequest() + TagConstants.tableCellEndTag)
 					.append(TagConstants.tableCellStartTag);
 			for (CarCharacteristics carchar : request.getCarCharacteristics()) {
-				sb.append(LocaleManager.BUNDLE.getString(carchar.getLocaleKey())).append(TagConstants.nextLineTag);
+				sb.append(LocaleManager.getString(carchar.getLocaleKey())).append(TagConstants.nextLineTag);
 			}
 			sb.append(TagConstants.tableCellEndTag).append(TagConstants.tableRowEndTag);
 		}

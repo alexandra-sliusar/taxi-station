@@ -7,6 +7,13 @@ import java.util.List;
 import ua.taxistation.entity.enums.CarCharacteristics;
 
 public class RequestDto {
+	
+	/**
+	 * class to get user request data from page and transfer it into service
+	 * @param pickup - place where user wanted to be picked up
+	 * @param destination - place where user should be delivered
+	 * @param carCharacteristics - list of special car features that user wants 
+	 */
 	private String pickup;
 	private String destination;
 	private List<CarCharacteristics> carCharacteristics = new ArrayList<>();

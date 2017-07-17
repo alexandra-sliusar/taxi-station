@@ -1,6 +1,9 @@
 package ua.taxistation.controller.dto;
 
 public class CredentialsDto {
+	/**
+	 * class to get user authorization and registration data from page and transfer it into service
+	 */
 	private String login;
 	private String password;
 	private String confirmPassword;
@@ -39,7 +42,6 @@ public class CredentialsDto {
 	public void setPhonenumber(String phonenumber) {
 		this.phonenumber = phonenumber;
 	}
-	
 
 	public String getConfirmPassword() {
 		return confirmPassword;

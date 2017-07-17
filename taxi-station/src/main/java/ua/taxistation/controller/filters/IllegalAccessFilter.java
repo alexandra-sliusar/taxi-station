@@ -22,10 +22,13 @@ import ua.taxistation.controller.utilities.RedirectionManager;
 import ua.taxistation.entity.User;
 import ua.taxistation.entity.enums.Role;
 import ua.taxistation.utilities.LocaleManager;
+import ua.taxistation.utilities.LocaleMessage;
 
 @WebFilter(urlPatterns = { "/main/client/*", "/main/driver/*", "/main/dispatcher/*" })
 public class IllegalAccessFilter implements Filter {
-
+	/**
+	 * filter class to prevent illegal access to pages
+	 */
 	private final static Logger LOGGER = Logger.getLogger(IllegalAccessFilter.class);
 
 	@Override
@@ -43,7 +46,7 @@ public class IllegalAccessFilter implements Filter {
 		if (!isUserSignIn(user) || !isPathLegalForUser(httpRequest.getRequestURI(), user)) {
 			LOGGER.info("Unauthorized access to the resource: " + httpRequest.getRequestURI());
 			Map<String, String> message = new HashMap<>();
-			message.put(Parameters.ERROR, LocaleManager.BUNDLE.getString(LocaleManager.ILLEGAL_ACCESS));
+			message.put(Parameters.ERROR, LocaleManager.getString(LocaleMessage.ILLEGAL_ACCESS));
 			RedirectionManager.getInstance().redirectWithMessages(httpRequest, httpResponse, Page.MAIN_PATH, message);
 			return;
 		}

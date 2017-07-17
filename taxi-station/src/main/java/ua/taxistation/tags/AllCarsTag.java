@@ -7,11 +7,15 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import ua.taxistation.entity.Car;
-import ua.taxistation.entity.Request;
 import ua.taxistation.entity.enums.CarCharacteristics;
 import ua.taxistation.utilities.LocaleManager;
+import ua.taxistation.utilities.LocaleMessage;
 
 public class AllCarsTag extends TagSupport {
+	/**
+	 * java tag class to output list of cars existing in the database
+	 */
+	private static final long serialVersionUID = 4418976297672039363L;
 	private List<Car> carList;
 
 	public void setCarList(List<Car> carList) {
@@ -31,21 +35,21 @@ public class AllCarsTag extends TagSupport {
 	private String showUserData() {
 		StringBuffer sb = new StringBuffer()
 				.append(TagConstants.tableStartTag + TagConstants.tableHeadStartTag + TagConstants.tableRowStartTag)
-				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.BUNDLE.getString(LocaleManager.ID)
+				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.getString(LocaleMessage.ID)
 						+ TagConstants.tableHeaderCellEndTag)
 				.append(TagConstants.tableHeaderCellStartTag
-						+ LocaleManager.BUNDLE.getString(LocaleManager.DRIVER_LOGIN)
+						+ LocaleManager.BUNDLE.getString(LocaleManager.getString(LocaleMessage.DRIVER_LOGIN))
 						+ TagConstants.tableHeaderCellEndTag)
-				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.BUNDLE.getString(LocaleManager.CAR_NUMBER)
+				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.getString(LocaleMessage.CAR_NUMBER)
 						+ TagConstants.tableHeaderCellEndTag)
-				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.BUNDLE.getString(LocaleManager.CAR_MODEL)
+				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.getString(LocaleMessage.CAR_MODEL)
 						+ TagConstants.tableHeaderCellEndTag)
-				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.BUNDLE.getString(LocaleManager.CAR_COLOR)
+				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.getString(LocaleMessage.CAR_COLOR)
 						+ TagConstants.tableHeaderCellEndTag)
 				.append(TagConstants.tableHeaderCellStartTag
-						+ LocaleManager.BUNDLE.getString(LocaleManager.CAR_CHARACTERISTICS)
+						+ LocaleManager.getString(LocaleMessage.CAR_CHARACTERISTICS)
 						+ TagConstants.tableHeaderCellEndTag)
-				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.BUNDLE.getString(LocaleManager.STATUS)
+				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.getString(LocaleMessage.STATUS)
 						+ TagConstants.tableHeaderCellEndTag)
 				.append(TagConstants.tableRowEndTag).append(TagConstants.tableHeadEndTag)
 				.append(TagConstants.tableBodyStartTag);
@@ -59,9 +63,9 @@ public class AllCarsTag extends TagSupport {
 					.append(TagConstants.tableCellStartTag + car.getColor() + TagConstants.tableCellEndTag)
 					.append(TagConstants.tableCellStartTag);
 			for (CarCharacteristics carchar : car.getCarCharacteristics()) {
-				sb.append(LocaleManager.BUNDLE.getString(carchar.getLocaleKey())).append(TagConstants.nextLineTag);
+				sb.append(LocaleManager.getString(carchar.getLocaleKey())).append(TagConstants.nextLineTag);
 			}
-			sb.append(TagConstants.tableCellStartTag + LocaleManager.BUNDLE.getString(car.getCarStatus().getLocaleKey())
+			sb.append(TagConstants.tableCellStartTag + LocaleManager.getString(car.getCarStatus().getLocaleKey())
 					+ TagConstants.tableCellEndTag);
 			sb.append(TagConstants.tableCellEndTag).append(TagConstants.tableRowEndTag);
 		}

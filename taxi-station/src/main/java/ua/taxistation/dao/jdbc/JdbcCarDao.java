@@ -43,6 +43,7 @@ public class JdbcCarDao implements CarDao {
 
 	private static String UPDATE_CAR = "UPDATE cars SET status = ? where id = ?";
 
+	//car fields
 	private static String ID = "cars.id";
 	private static String DRIVERID = "cars.driver_id";
 	private static String NUMBER = "cars.number";

@@ -31,9 +31,11 @@ import ua.taxistation.services.RequestService;
 import ua.taxistation.services.UserService;
 
 public class CommandFactory {
-
+	/**
+	 * class generates command key from request method and uri
+	 * returns command by this key
+	 */
 	private static String INDEX_PATH = ".*/main/";
-	private static String ID = "\\d+";
 	private static String REPLACEMENT = "";
 	private static String DELIMITER = ":";
 
@@ -72,7 +74,7 @@ public class CommandFactory {
 
 	public static String extractKeyFromRequest(HttpServletRequest request) {
 		String method = request.getMethod().toUpperCase();
-		String path = request.getRequestURI().replaceAll(INDEX_PATH, REPLACEMENT).replaceAll(ID, REPLACEMENT);
+		String path = request.getRequestURI().replaceAll(INDEX_PATH, REPLACEMENT);
 		String key = method + DELIMITER + path;
 		System.out.println(key);
 		return key;

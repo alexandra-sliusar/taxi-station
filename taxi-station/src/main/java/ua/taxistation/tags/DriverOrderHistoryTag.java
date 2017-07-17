@@ -8,8 +8,13 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import ua.taxistation.entity.Order;
 import ua.taxistation.utilities.LocaleManager;
+import ua.taxistation.utilities.LocaleMessage;
 
 public class DriverOrderHistoryTag extends TagSupport {
+	/**
+	 * java tag class to output list of orders according to driver
+	 */
+	private static final long serialVersionUID = -6461279646550178005L;
 	private List<Order> orderList;
 
 	public void setOrderList(List<Order> orderList) {
@@ -29,18 +34,18 @@ public class DriverOrderHistoryTag extends TagSupport {
 	private String showUserData() {
 		StringBuffer sb = new StringBuffer()
 				.append(TagConstants.tableStartTag + TagConstants.tableHeadStartTag + TagConstants.tableRowStartTag)
-				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.BUNDLE.getString(LocaleManager.ID)
+				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.getString(LocaleMessage.ID)
 						+ TagConstants.tableHeaderCellEndTag)
-				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.BUNDLE.getString(LocaleManager.PICKUP)
+				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.getString(LocaleMessage.PICKUP)
 						+ TagConstants.tableHeaderCellEndTag)
-				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.BUNDLE.getString(LocaleManager.DESTINATION)
+				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.getString(LocaleMessage.DESTINATION)
 						+ TagConstants.tableHeaderCellEndTag)
 				.append(TagConstants.tableHeaderCellStartTag
-						+ LocaleManager.BUNDLE.getString(LocaleManager.PHONE_NUMBER)
+						+ LocaleManager.getString(LocaleMessage.PHONE_NUMBER)
 						+ TagConstants.tableHeaderCellEndTag)
-				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.BUNDLE.getString(LocaleManager.DATE)
+				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.getString(LocaleMessage.DATE)
 						+ TagConstants.tableHeaderCellEndTag)
-				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.BUNDLE.getString(LocaleManager.STATUS)
+				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.getString(LocaleMessage.STATUS)
 						+ TagConstants.tableHeaderCellEndTag)
 				.append(TagConstants.tableRowEndTag).append(TagConstants.tableHeadEndTag)
 				.append(TagConstants.tableBodyStartTag);
@@ -57,7 +62,7 @@ public class DriverOrderHistoryTag extends TagSupport {
 					.append(TagConstants.tableCellStartTag + order.getRequest().getDateOfRequest()
 							+ TagConstants.tableCellEndTag)
 					.append(TagConstants.tableCellStartTag
-							+ LocaleManager.BUNDLE.getString(order.getOrderStatus().getLocaleKey())
+							+ LocaleManager.getString(order.getOrderStatus().getLocaleKey())
 							+ TagConstants.tableCellEndTag)
 					.append(TagConstants.tableRowEndTag);
 		}

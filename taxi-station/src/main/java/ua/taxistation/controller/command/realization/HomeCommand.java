@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import ua.taxistation.controller.command.Command;
 import ua.taxistation.controller.constants.Parameters;
 import ua.taxistation.utilities.LocaleManager;
+import ua.taxistation.utilities.LocaleMessage;
 
 public class HomeCommand implements Command {
 
@@ -23,7 +24,7 @@ public class HomeCommand implements Command {
 			request.setAttribute(Parameters.SUCCESS, success);
 			request.setAttribute(Parameters.ERROR, error);
 		} catch (Exception e) {
-			request.setAttribute(Parameters.ERROR, LocaleManager.BUNDLE.getString(LocaleManager.ERROR));
+			request.setAttribute(Parameters.ERROR, LocaleManager.getString(LocaleMessage.ERROR));
 		}
 		return "/index.jsp";
 	}

@@ -4,10 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import ua.taxistation.controller.dto.RequestDto;
-import ua.taxistation.dao.DaoConnection;
 import ua.taxistation.dao.DaoFactory;
 import ua.taxistation.dao.RequestDao;
 import ua.taxistation.entity.Request;

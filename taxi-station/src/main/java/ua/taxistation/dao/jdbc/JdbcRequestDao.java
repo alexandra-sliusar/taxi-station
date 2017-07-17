@@ -40,6 +40,7 @@ public class JdbcRequestDao implements RequestDao {
 
 	private static String UPDATE_REQUEST = "UPDATE requests SET status = ? where id = ?";
 
+	//request fields
 	private static String ID = "requests.id";
 	private static String USERID = "requests.user_id";
 	private static String PICKUP = "requests.pickup";

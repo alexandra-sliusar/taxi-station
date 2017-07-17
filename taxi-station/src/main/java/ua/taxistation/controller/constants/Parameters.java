@@ -1,10 +1,17 @@
 package ua.taxistation.controller.constants;
 
 public class Parameters {
+	/**
+	 * strings used in generating urls
+	 */
 	public static String EMPTY_STRING = "";
 	public static String QUESTION_MARK = "?";
 	public static String EQUALITY_SIGN = "=";
 	public static String AMPERSAND = "&";
+	
+	/**
+	 * strings used as parameters in jsp pages
+	 */
 	public static String LANG = "lang";
 	public static String LOCALE = "locale";
 	public static String USER = "user";
