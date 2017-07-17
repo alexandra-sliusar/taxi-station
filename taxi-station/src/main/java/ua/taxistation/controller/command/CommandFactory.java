@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import ua.taxistation.controller.command.realization.ChangeLocaleCommand;
 import ua.taxistation.controller.command.realization.HomeCommand;
+import ua.taxistation.controller.command.realization.PageNotFoundCommand;
 import ua.taxistation.controller.command.realization.authorization.GetLoginCommand;
 import ua.taxistation.controller.command.realization.authorization.GetSignupCommand;
 import ua.taxistation.controller.command.realization.authorization.LogoutCommand;
@@ -39,33 +40,34 @@ public class CommandFactory {
 	private static Map<String, Command> commands = new HashMap<>();
 	static {
 		commands.put("GET:", new HomeCommand());
-		commands.put("GET:errorPage", new HomeCommand());
+		commands.put("GET:pageNotFound", new PageNotFoundCommand());
 		commands.put("GET:login", new GetLoginCommand());
 		commands.put("POST:login", new PostLoginCommand(UserService.getInstance()));
 		commands.put("GET:signup", new GetSignupCommand());
 		commands.put("POST:signup", new PostSignupCommand(UserService.getInstance()));
 		commands.put("GET:locale", new ChangeLocaleCommand());
 		commands.put("GET:logout", new LogoutCommand());
-		commands.put("GET:ordercar", new GetOrderCarCommand());
-		commands.put("POST:ordercar", new PostOrderCarCommand(RequestService.getInstance()));
-		commands.put("GET:requests", new GetAllRequestsCommand(RequestService.getInstance()));
-		commands.put("GET:requests/request",
+		commands.put("GET:client/ordercar", new GetOrderCarCommand());
+		commands.put("POST:client/ordercar", new PostOrderCarCommand(RequestService.getInstance()));
+		commands.put("GET:dispatcher/requests", new GetAllRequestsCommand(RequestService.getInstance()));
+		commands.put("GET:dispatcher/requests/request",
 				new GetRequestCommand(RequestService.getInstance(), CarService.getInstance()));
-		commands.put("POST:requests/request/submit", new PostRequestCommand(OrderService.getInstance()));
-		commands.put("POST:requests/request/reject", new RejectRequestCommand(RequestService.getInstance()));
-		commands.put("GET:cars", new GetAllCarsCommand(CarService.getInstance()));
+		commands.put("POST:dispatcher/requests/request/submit", new PostRequestCommand(OrderService.getInstance()));
+		commands.put("POST:dispatcher/requests/request/reject", new RejectRequestCommand(RequestService.getInstance()));
+		commands.put("GET:dispatcher/cars", new GetAllCarsCommand(CarService.getInstance()));
 		commands.put("GET:client/history", new ClientHistoryCommand(OrderService.getInstance()));
 		commands.put("GET:driver/history", new DriverHistoryCommand(OrderService.getInstance()));
-		commands.put("GET:profile", new ProfileCommand(CarService.getInstance(), OrderService.getInstance()));
-		commands.put("POST:profile/changeCarStatus", new ChangeCarStatusCommand(CarService.getInstance(), OrderService.getInstance()));
-		commands.put("POST:profile/changeOrderStatus",
+		commands.put("GET:driver/profile", new ProfileCommand(CarService.getInstance(), OrderService.getInstance()));
+		commands.put("POST:driver/profile/changeCarStatus",
+				new ChangeCarStatusCommand(CarService.getInstance(), OrderService.getInstance()));
+		commands.put("POST:driver/profile/changeOrderStatus",
 				new ChangeOrderStatusCommand(OrderService.getInstance(), CarService.getInstance()));
 	}
 
 	public static Command getCommand(HttpServletRequest request) {
 		String key = extractKeyFromRequest(request);
 		Command command = commands.get(key);
-		return (command == null) ? commands.get("errorPage") : command;
+		return (command == null) ? commands.get("GET:pageNotFound") : command;
 	}
 
 	public static String extractKeyFromRequest(HttpServletRequest request) {

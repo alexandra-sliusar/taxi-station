@@ -177,10 +177,11 @@ public class JdbcRequestDao implements RequestDao {
 					request = extractRequestFromResultSet(resultSet);
 					request.addCarCharacteristic(
 							CarCharacteristics.valueOf(resultSet.getString(CHARACTERISTIC_VALUE).toUpperCase()));
+					System.out.println(1);
 					last_request_id = request.getId();
 
 				} else {
-
+					System.out.println(2);
 					request.addCarCharacteristic(
 							CarCharacteristics.valueOf(resultSet.getString(CHARACTERISTIC_VALUE).toUpperCase()));
 				}

@@ -60,6 +60,8 @@ public class PostOrderCarCommand implements Command {
 			chars.add(CarCharacteristics.WIFI);
 		if (request.getParameter(Parameters.CARCHAR_PREMIUM) != null)
 			chars.add(CarCharacteristics.PREMIUM);
+		if (chars.isEmpty())
+			chars.add(CarCharacteristics.NONE);
 
 		return new RequestDto(request.getParameter(Parameters.PICKUP), request.getParameter(Parameters.DESTINATION),
 				chars);

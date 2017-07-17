@@ -33,7 +33,7 @@
 				<c:if test="${not empty user}">
 					<c:if test="${user.getRole().name().toLowerCase() eq 'client' }">
 						<li><a
-							href="${pageContext.request.contextPath}/main/ordercar"> <fmt:message
+							href="${pageContext.request.contextPath}/main/client/ordercar"> <fmt:message
 									key="taxistation.order.car" bundle="${bundle}" />
 						</a></li>
 
@@ -43,7 +43,7 @@
 
 					</c:if>
 					<c:if test="${user.getRole().name().toLowerCase() eq 'driver' }">
-						<li><a href="${pageContext.request.contextPath}/main/profile"><fmt:message
+						<li><a href="${pageContext.request.contextPath}/main/driver/profile"><fmt:message
 									key="taxistation.car.profile" bundle="${bundle}" /></a></li>
 						<li><a href="${pageContext.request.contextPath}/main/driver/history">
 								<fmt:message key="taxistation.history" bundle="${bundle}" />
@@ -52,9 +52,9 @@
 					<c:if
 						test="${user.getRole().name().toLowerCase() eq 'dispatcher' }">
 						<li><a
-							href="${pageContext.request.contextPath}/main/requests"><fmt:message
+							href="${pageContext.request.contextPath}/main/dispatcher/requests"><fmt:message
 									key="taxistation.requests" bundle="${bundle}" /></a></li>
-						<li><a href="${pageContext.request.contextPath}/main/cars"><fmt:message
+						<li><a href="${pageContext.request.contextPath}/main/dispatcher/cars"><fmt:message
 									key="taxistation.cars" bundle="${bundle}" /></a></li>
 					</c:if>
 				</c:if>

@@ -37,4 +37,5 @@ public final class LocaleManager {
 	public static String CAR_COLOR = "taxistation.history.color";
 	public static String PHONE_NUMBER = "taxistation.history.user.phonenumber";
 	public static String STATUS = "taxistation.status";
+	public static String ILLEGAL_ACCESS = "taxistation.illegal.access";
 }

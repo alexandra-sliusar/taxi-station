@@ -39,8 +39,10 @@ public class CarService {
 		Set<Car> cars = new HashSet<>();
 		try (CarDao carDao = daoFactory.createCarDao()) {
 			cars.addAll(carDao.getAll());
-			for (CarCharacteristics carCharacteristic : characteristics) {
-				cars.retainAll(carDao.getCarsByCharacteristicAndStatus(carCharacteristic, CarStatus.AVAILABLE));
+			if (!characteristics.contains(CarCharacteristics.NONE)) {
+				for (CarCharacteristics carCharacteristic : characteristics) {
+					cars.retainAll(carDao.getCarsByCharacteristicAndStatus(carCharacteristic, CarStatus.AVAILABLE));
+				}
 			}
 
 		}

@@ -13,7 +13,6 @@ import ua.taxistation.utilities.LocaleManager;
 @SuppressWarnings("serial")
 public class RequestsHistoryTag extends TagSupport {
 	private List<Request> requestList;
-	
 
 	public void setRequestList(List<Request> requestList) {
 		this.requestList = requestList;
@@ -30,7 +29,8 @@ public class RequestsHistoryTag extends TagSupport {
 	}
 
 	private String showUserData() {
-		StringBuffer sb = new StringBuffer().append(TagConstants.tableStartTag + TagConstants.tableHeadStartTag + TagConstants.tableRowStartTag)
+		StringBuffer sb = new StringBuffer()
+				.append(TagConstants.tableStartTag + TagConstants.tableHeadStartTag + TagConstants.tableRowStartTag)
 				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.BUNDLE.getString(LocaleManager.ID)
 						+ TagConstants.tableHeaderCellEndTag)
 				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.BUNDLE.getString(LocaleManager.PICKUP)
@@ -39,17 +39,19 @@ public class RequestsHistoryTag extends TagSupport {
 						+ TagConstants.tableHeaderCellEndTag)
 				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.BUNDLE.getString(LocaleManager.DATE)
 						+ TagConstants.tableHeaderCellEndTag)
-				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.BUNDLE.getString(LocaleManager.CAR_CHARACTERISTICS)
-						+ TagConstants.tableHeaderCellEndTag)
-				.append(TagConstants.tableRowEndTag).append(TagConstants.tableHeadEndTag).append(TagConstants.tableBodyStartTag);
+
+				.append(TagConstants.tableRowEndTag).append(TagConstants.tableHeadEndTag)
+				.append(TagConstants.tableBodyStartTag);
 
 		for (Request request : requestList) {
 			sb.append(TagConstants.tableRowStartTag);
-			sb.append(TagConstants.tableCellStartTag).append(TagConstants.linkToRequestStartTag + request.getId() + TagConstants.linkToRequestEnd)
+			sb.append(TagConstants.tableCellStartTag)
+					.append(TagConstants.linkToRequestStartTag + request.getId() + TagConstants.linkToRequestEnd)
 					.append(request.getId()).append(TagConstants.linkEndTag + TagConstants.tableCellEndTag)
 					.append(TagConstants.tableCellStartTag + request.getPickup() + TagConstants.tableCellEndTag)
 					.append(TagConstants.tableCellStartTag + request.getDestination() + TagConstants.tableCellEndTag)
-					.append(TagConstants.tableCellStartTag + request.getDateOfRequest() + TagConstants.tableCellEndTag).append(TagConstants.tableCellStartTag);
+					.append(TagConstants.tableCellStartTag + request.getDateOfRequest() + TagConstants.tableCellEndTag)
+					.append(TagConstants.tableCellStartTag);
 			for (CarCharacteristics carchar : request.getCarCharacteristics()) {
 				sb.append(LocaleManager.BUNDLE.getString(carchar.getLocaleKey())).append(TagConstants.nextLineTag);
 			}

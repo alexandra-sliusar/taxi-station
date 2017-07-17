@@ -14,6 +14,7 @@ public class Page {
 	public static String CARS_PAGE = PREFIX + "cars" + SUFFIX;
 	public static String HISTORY_PAGE = PREFIX + "history" + SUFFIX;
 	public static String PROFILE_PAGE = PREFIX + "profile" + SUFFIX;
-	public static String PROFILE_PAGE_TO_REDIRECT = "/profile";
+	public static String PROFILE_PAGE_TO_REDIRECT = "/driver/profile";
+	public static String PAGE_NOT_FOUND = PREFIX + "pagenotfound" + SUFFIX; 
 
 }
