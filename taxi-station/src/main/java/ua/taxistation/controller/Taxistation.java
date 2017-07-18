@@ -3,7 +3,7 @@ package ua.taxistation.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -16,11 +16,12 @@ import org.apache.log4j.Logger;
 
 import ua.taxistation.controller.command.Command;
 import ua.taxistation.controller.command.CommandFactory;
-
+import ua.taxistation.controller.constants.LocaleEnum;
 import ua.taxistation.controller.constants.Page;
 import ua.taxistation.controller.constants.Parameters;
 import ua.taxistation.controller.utilities.RedirectionManager;
 import ua.taxistation.exceptions.ServerAppException;
+import ua.taxistation.utilities.LocaleManager;
 
 @WebServlet(urlPatterns = { "/main/*" })
 public class Taxistation extends HttpServlet {
@@ -57,7 +58,8 @@ public class Taxistation extends HttpServlet {
 			throws UnsupportedEncodingException {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
-
+		Locale chosenLocale = LocaleEnum.getLocaleByLang((String) request.getSession().getAttribute(Parameters.LANG));
+		LocaleManager.setResourceBundleLocale(chosenLocale);
 	}
 
 	private void errorPageRedirection(HttpServletRequest request, HttpServletResponse response, Exception e)
