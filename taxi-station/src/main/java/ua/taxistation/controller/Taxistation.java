@@ -58,7 +58,7 @@ public class Taxistation extends HttpServlet {
 			throws UnsupportedEncodingException {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
-		Locale chosenLocale = LocaleEnum.getLocaleByLang((String) request.getSession().getAttribute(Parameters.LANG));
+		Locale chosenLocale = LocaleEnum.getLocaleByLang(request.getSession().getAttribute(Parameters.LANG).toString());
 		LocaleManager.setResourceBundleLocale(chosenLocale);
 	}
 
