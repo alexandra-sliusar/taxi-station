@@ -16,6 +16,7 @@ import ua.taxistation.entity.User;
 import ua.taxistation.exceptions.ServerAppException;
 import ua.taxistation.services.UserService;
 import ua.taxistation.utilities.LocaleManager;
+import ua.taxistation.utilities.LocaleMessage;
 import ua.taxistation.utilities.Validator;
 
 public class PostLoginCommand implements Command {
@@ -42,7 +43,7 @@ public class PostLoginCommand implements Command {
 		if (!ifInputCorrect) {
 			if (credentialsDto.getLogin() != null)
 				request.setAttribute(Parameters.USEREMAIL, credentialsDto.getLogin());
-			request.setAttribute(Parameters.ERROR, LocaleManager.BUNDLE.getString(LocaleManager.INVALID_DATA_AUTH));
+			request.setAttribute(Parameters.ERROR, LocaleManager.getString(LocaleMessage.INVALID_DATA_AUTH));
 			return Page.LOGIN_PAGE;
 		}
 
@@ -52,7 +53,7 @@ public class PostLoginCommand implements Command {
 			RedirectionManager.getInstance().redirect(request, response, Page.MAIN_PATH);
 			return RedirectionManager.REDIRECTION;
 		} catch (ServerAppException e) {
-			request.setAttribute(Parameters.ERROR, LocaleManager.BUNDLE.getString(LocaleManager.WRONG_DATA_AUTH));
+			request.setAttribute(Parameters.ERROR, LocaleManager.getString(LocaleMessage.WRONG_DATA_AUTH));
 			return Page.LOGIN_PAGE;
 		}
 	}

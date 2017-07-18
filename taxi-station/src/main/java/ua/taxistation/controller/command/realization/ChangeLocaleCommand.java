@@ -22,7 +22,6 @@ public class ChangeLocaleCommand implements Command {
 	private void setLocale(HttpServletRequest request) {
 		String selectedLanguage = request.getParameter(Parameters.LANG);
 		Locale chosenLocale = LocaleEnum.valueOf(selectedLanguage).getLocale();
-
 		request.getSession().setAttribute(Parameters.LOCALE, chosenLocale);
 		LocaleManager.setResourceBundleLocale(chosenLocale);
 	}

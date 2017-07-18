@@ -1,7 +1,9 @@
 package ua.taxistation.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -14,12 +16,13 @@ import org.apache.log4j.Logger;
 
 import ua.taxistation.controller.command.Command;
 import ua.taxistation.controller.command.CommandFactory;
+
 import ua.taxistation.controller.constants.Page;
 import ua.taxistation.controller.constants.Parameters;
 import ua.taxistation.controller.utilities.RedirectionManager;
 import ua.taxistation.exceptions.ServerAppException;
 
-@WebServlet(urlPatterns = "/main/*")
+@WebServlet(urlPatterns = { "/main/*" })
 public class Taxistation extends HttpServlet {
 
 	private static final Logger LOGGER = Logger.getLogger(Taxistation.class);
@@ -39,17 +42,29 @@ public class Taxistation extends HttpServlet {
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		initializePage(request, response);
 		Command command = CommandFactory.getCommand(request);
 		try {
 			String resultPath = command.execute(request, response);
 			if (!resultPath.equals(RedirectionManager.REDIRECTION))
 				request.getRequestDispatcher(resultPath).forward(request, response);
 		} catch (ServerAppException e) {
-			LOGGER.error("Command execution error: " + command.getClass().getSimpleName());
-			Map<String, String> message = new HashMap<>();
-			message.put(Parameters.ERROR, e.getMessage());
-			RedirectionManager.getInstance().redirectWithMessages(request, response, Page.MAIN_PATH, message);
+			errorPageRedirection(request, response, e);
 		}
 	}
 
+	private void initializePage(HttpServletRequest request, HttpServletResponse response)
+			throws UnsupportedEncodingException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
+
+	}
+
+	private void errorPageRedirection(HttpServletRequest request, HttpServletResponse response, Exception e)
+			throws IOException {
+		LOGGER.error("Command execution error: " + e);
+		Map<String, String> message = new HashMap<>();
+		message.put(Parameters.ERROR, e.getMessage());
+		RedirectionManager.getInstance().redirectWithMessages(request, response, Page.MAIN_PATH, message);
+	}
 }

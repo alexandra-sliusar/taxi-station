@@ -44,6 +44,8 @@ public class CarService {
 					cars.retainAll(carDao.getCarsByCharacteristicAndStatus(carCharacteristic, CarStatus.AVAILABLE));
 				}
 			}
+			else
+				cars.retainAll(carDao.getCarsByStatus(CarStatus.AVAILABLE));
 
 		}
 		return new ArrayList<Car>(cars);

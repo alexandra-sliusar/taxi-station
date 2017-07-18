@@ -37,8 +37,7 @@ public class AllCarsTag extends TagSupport {
 				.append(TagConstants.tableStartTag + TagConstants.tableHeadStartTag + TagConstants.tableRowStartTag)
 				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.getString(LocaleMessage.ID)
 						+ TagConstants.tableHeaderCellEndTag)
-				.append(TagConstants.tableHeaderCellStartTag
-						+ LocaleManager.BUNDLE.getString(LocaleManager.getString(LocaleMessage.DRIVER_LOGIN))
+				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.getString(LocaleMessage.DRIVER_LOGIN)
 						+ TagConstants.tableHeaderCellEndTag)
 				.append(TagConstants.tableHeaderCellStartTag + LocaleManager.getString(LocaleMessage.CAR_NUMBER)
 						+ TagConstants.tableHeaderCellEndTag)

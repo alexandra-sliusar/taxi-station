@@ -16,6 +16,7 @@ import ua.taxistation.entity.Request;
 import ua.taxistation.entity.enums.RequestStatus;
 import ua.taxistation.services.RequestService;
 import ua.taxistation.utilities.LocaleManager;
+import ua.taxistation.utilities.LocaleMessage;
 
 public class RejectRequestCommand implements Command {
 
@@ -32,7 +33,7 @@ public class RejectRequestCommand implements Command {
 		Request carRequest = new Request.Builder().setId(carRequestId).setRequestStatus(RequestStatus.REJECTED).build();
 		requestService.updateRequestStatus(carRequest);
 		Map<String, String> message = new HashMap<>();
-		message.put(Parameters.SUCCESS, LocaleManager.BUNDLE.getString(LocaleManager.REQUEST_REJECTED));
+		message.put(Parameters.SUCCESS, LocaleManager.getString(LocaleMessage.REQUEST_REJECTED));
 		RedirectionManager.getInstance().redirectWithMessages(request, response, Page.MAIN_PATH,
 				message);
 		return RedirectionManager.REDIRECTION;

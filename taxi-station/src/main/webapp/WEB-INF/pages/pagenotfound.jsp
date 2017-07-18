@@ -24,7 +24,7 @@
 		<div class="row">
 
 			<div class="error alert alert-danger">
-				<strong> ${pageContext.errorData.statusCode}</strong><br /> <strong>
+				<strong>
 					<fmt:message key="taxistation.error.pagenotfound" bundle="${bundle}" />
 				</strong>
 			</div>

@@ -16,7 +16,7 @@ public final class Validator {
 	 * Mkfe., fawf, 123
 	 * Ул. Лондонская, 24/7
 	 * */
-	private static final String ADDRESS_REGEX = "^([A-ZА-Яa-zа-я0-9\\.,/\\s]){3,}[A-ZА-Яa-zа-я0-9\\.,/\\s]+";
+	private static final String ADDRESS_REGEX = "^([A-Za-zА-Яа-я0-9\\.,/\\s]){3,}[A-Za-zА-яа-я0-9\\.,/\\s]+";
 	/** matches:
 	 *  (XXX) XXX-XX-XX 
 	 */

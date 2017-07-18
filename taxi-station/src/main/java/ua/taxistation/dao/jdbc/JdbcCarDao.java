@@ -41,9 +41,12 @@ public class JdbcCarDao implements CarDao {
 			+ "AND m2m_cars_characteristics.characteristic_id = car_characteristics.id AND cars.status = ? "
 			+ "AND car_characteristics.value = ?";
 
+	private static String SELECT_CARS_BY_STATUS = "SELECT cars.id, cars.driver_id, cars.number, cars.model, "
+			+ "cars.color, cars.status FROM cars WHERE cars.status = ?";
+
 	private static String UPDATE_CAR = "UPDATE cars SET status = ? where id = ?";
 
-	//car fields
+	// car fields
 	private static String ID = "cars.id";
 	private static String DRIVERID = "cars.driver_id";
 	private static String NUMBER = "cars.number";
@@ -147,17 +150,40 @@ public class JdbcCarDao implements CarDao {
 
 	public List<Car> getCarsByCharacteristicAndStatus(CarCharacteristics characteristic, CarStatus carStatus) {
 		List<Car> cars = new ArrayList<>();
+
 		try (PreparedStatement query = connection.prepareStatement(SELECT_CARS_BY_CHARACTERISTIC_AND_STATUS)) {
 			query.setString(1, carStatus.name().toLowerCase());
 			query.setString(2, characteristic.name().toLowerCase());
 			ResultSet resultSet = query.executeQuery();
+
 			while (resultSet.next()) {
+
 				Car car = extractCarFromResultSet(resultSet);
 				car.addCarCharacteristic(characteristic);
+
 				cars.add(car);
+
 			}
 		} catch (SQLException e) {
 			LOGGER.error("JdbcCarDao getByCharacteristicsAndStatus SQL failed", e);
+			throw new ServerAppException(e);
+		}
+		return cars;
+	}
+
+	@Override
+	public List<Car> getCarsByStatus(CarStatus carStatus) {
+		List<Car> cars = new ArrayList<>();
+		try (PreparedStatement query = connection.prepareStatement(SELECT_CARS_BY_STATUS)) {
+			query.setString(1, carStatus.name().toLowerCase());
+			ResultSet resultSet = query.executeQuery();
+			while (resultSet.next()) {
+
+				Car car = extractCarFromResultSet(resultSet);
+				cars.add(car);
+			}
+		} catch (SQLException e) {
+			LOGGER.error("JdbcCarDao getByStatus SQL failed", e);
 			throw new ServerAppException(e);
 		}
 		return cars;

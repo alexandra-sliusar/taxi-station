@@ -18,6 +18,7 @@ import ua.taxistation.entity.User;
 import ua.taxistation.exceptions.ServerAppException;
 import ua.taxistation.services.UserService;
 import ua.taxistation.utilities.LocaleManager;
+import ua.taxistation.utilities.LocaleMessage;
 import ua.taxistation.utilities.Validator;
 
 public class PostSignupCommand implements Command {
@@ -54,7 +55,7 @@ public class PostSignupCommand implements Command {
 			RedirectionManager.getInstance().redirect(request, response, Page.MAIN_PATH);
 			return RedirectionManager.REDIRECTION;
 		} catch (ServerAppException e) {
-			errors.add(LocaleManager.SIGNUP_DB_ERROR);
+			errors.add(LocaleMessage.SIGNUP_DB_ERROR);
 			request.setAttribute(Parameters.ERRORS, errors);
 			return Page.SIGNUP_PAGE;
 		}
@@ -68,16 +69,16 @@ public class PostSignupCommand implements Command {
 	private List<String> validateUserInput(CredentialsDto credentialsDto) {
 		List<String> errors = new ArrayList<>();
 		if (!credentialsDto.getPassword().equals(credentialsDto.getConfirmPassword())) {
-			errors.add(LocaleManager.CONFIRM_PASS_ERROR);
+			errors.add(LocaleMessage.CONFIRM_PASS_ERROR);
 		}
 		if (!Validator.getInstance().validateLogin(credentialsDto.getLogin())) {
-			errors.add(LocaleManager.LOGIN_REGEX_ERROR);
+			errors.add(LocaleMessage.LOGIN_REGEX_ERROR);
 		}
 		if (!Validator.getInstance().validatePassword(credentialsDto.getPassword())) {
-			errors.add(LocaleManager.PASS_REGEX_ERROR);
+			errors.add(LocaleMessage.PASS_REGEX_ERROR);
 		}
 		if (!Validator.getInstance().validatePhoneNumber(credentialsDto.getPhonenumber())) {
-			errors.add(LocaleManager.PHONE_NUMBER_REGEX_ERROR);
+			errors.add(LocaleMessage.PHONE_NUMBER_REGEX_ERROR);
 		}
 		return errors;
 	}

@@ -11,6 +11,8 @@ public interface CarDao extends GenericDao<Car>, AutoCloseable {
 
 	public List<Car> getCarsByCharacteristicAndStatus(CarCharacteristics characteristics, CarStatus carStatus);
 
+	public List<Car> getCarsByStatus(CarStatus carStatus);
+
 	public Optional<Car> getCarByDriver(Long driverId);
 
 	void close();

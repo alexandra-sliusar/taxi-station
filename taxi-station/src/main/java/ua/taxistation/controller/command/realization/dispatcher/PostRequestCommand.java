@@ -11,11 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import ua.taxistation.controller.command.Command;
 import ua.taxistation.controller.constants.Page;
 import ua.taxistation.controller.constants.Parameters;
-import ua.taxistation.controller.dto.RequestDto;
 import ua.taxistation.controller.utilities.RedirectionManager;
-import ua.taxistation.entity.User;
 import ua.taxistation.services.OrderService;
 import ua.taxistation.utilities.LocaleManager;
+import ua.taxistation.utilities.LocaleMessage;
 
 public class PostRequestCommand implements Command {
 
@@ -32,20 +31,20 @@ public class PostRequestCommand implements Command {
 		try {
 			carId = request.getParameter(Parameters.CAR_AVAILABLE);
 		} catch (Exception e) {
-			request.setAttribute(Parameters.ERROR, LocaleManager.BUNDLE.getString(LocaleManager.NOT_SELECTED));
+			request.setAttribute(Parameters.ERROR, LocaleManager.getString(LocaleMessage.NOT_SELECTED));
 			return Page.REQUEST_PAGE;
 		}
 
 		try {
 			orderService.createOrder(carRequestId, Long.parseLong(carId));
 			Map<String, String> message = new HashMap<>();
-			message.put(Parameters.SUCCESS, LocaleManager.BUNDLE.getString(LocaleManager.ORDER_ADDITION_SUCCESS));
+			message.put(Parameters.SUCCESS, LocaleManager.getString(LocaleMessage.ORDER_ADDITION_SUCCESS));
 			RedirectionManager.getInstance().redirectWithMessages(request, response, Page.MAIN_PATH,
 					message);
 			return RedirectionManager.REDIRECTION;
 		} catch (Exception e) {
 			Map<String, String> message = new HashMap<>();
-			message.put(Parameters.ERROR, LocaleManager.BUNDLE.getString(LocaleManager.ORDER_ADDITION_ERROR));
+			message.put(Parameters.ERROR, LocaleManager.getString(LocaleMessage.ORDER_ADDITION_ERROR));
 			RedirectionManager.getInstance().redirectWithMessages(request, response, Page.MAIN_PATH,
 					message);
 			return RedirectionManager.REDIRECTION;

@@ -1,27 +1,20 @@
 package ua.taxistation.controller.command.realization.client;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import com.sun.org.apache.xalan.internal.xsltc.runtime.Parameter;
 
 import ua.taxistation.controller.command.Command;
 import ua.taxistation.controller.constants.Page;
 import ua.taxistation.controller.constants.Parameters;
 import ua.taxistation.controller.dto.RequestDto;
-import ua.taxistation.controller.utilities.RedirectionManager;
 import ua.taxistation.entity.User;
 import ua.taxistation.entity.enums.CarCharacteristics;
-import ua.taxistation.exceptions.ServerAppException;
 import ua.taxistation.services.RequestService;
 import ua.taxistation.utilities.LocaleManager;
+import ua.taxistation.utilities.LocaleMessage;
 import ua.taxistation.utilities.Validator;
 
 public class PostOrderCarCommand implements Command {
@@ -36,13 +29,14 @@ public class PostOrderCarCommand implements Command {
 
 		RequestDto requestDto = getUserInput(request);
 		boolean isCorrect = validateUserInput(requestDto);
+		System.out.println(requestDto.getPickup());
 		if (isCorrect) {
 			requestService.createRequest(requestDto, (User) request.getSession().getAttribute(Parameters.USER));
 			request.setAttribute(Parameters.SUCCESS,
-					LocaleManager.BUNDLE.getString(LocaleManager.SUCCESS_REQUEST_ADDITION));
+					LocaleManager.getString(LocaleMessage.SUCCESS_REQUEST_ADDITION));
 			return Page.ORDERCAR_PAGE;
 		}
-		request.setAttribute(Parameters.ERROR, LocaleManager.BUNDLE.getString(LocaleManager.INVALID_CAR_ORDER_DATA));
+		request.setAttribute(Parameters.ERROR, LocaleManager.getString(LocaleMessage.INVALID_CAR_ORDER_DATA));
 		return Page.ORDERCAR_PAGE;
 	}
 
