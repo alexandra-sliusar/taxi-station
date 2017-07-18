@@ -17,7 +17,7 @@ public class RequestService {
 
 	private DaoFactory daoFactory;
 
-	RequestService(DaoFactory daoFactory) {
+	public RequestService(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 
@@ -37,12 +37,12 @@ public class RequestService {
 		return requests;
 	}
 	
-	public Request getRequestById(Long id) {
+	public Optional<Request> getRequestById(Long id) {
 		Optional<Request> optionalRequest = Optional.empty();
 		try (RequestDao requestDao = daoFactory.createRequestDao()) {
 			optionalRequest = requestDao.getById(id);
 		}
-		return optionalRequest.get();
+		return optionalRequest;
 	}
 
 	public void updateRequestStatus(Request request) {

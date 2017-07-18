@@ -1,6 +1,7 @@
 package ua.taxistation.controller.command.realization.dispatcher;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,8 +26,8 @@ public class GetRequestCommand implements Command {
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
 		Long carRequestId = Long.parseLong(request.getParameter(Parameters.REQUEST_ID));
-		Request carRequest = requestService.getRequestById(carRequestId);
-		List<Car> availableCars = carService.getCarsByCharacteristics(carRequest.getCarCharacteristics());
+		Optional<Request> carRequest = requestService.getRequestById(carRequestId);
+		List<Car> availableCars = carService.getCarsByCharacteristics(carRequest.get().getCarCharacteristics());
 		request.setAttribute(Parameters.CARS, availableCars);
 		request.setAttribute(Parameters.REQUEST_ID, carRequestId);
 		return Page.REQUEST_PAGE;

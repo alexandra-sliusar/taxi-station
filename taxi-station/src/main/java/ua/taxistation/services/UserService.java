@@ -18,7 +18,7 @@ public class UserService {
 
 	private DaoFactory daoFactory;
 
-	UserService(DaoFactory daoFactory) {
+	public UserService(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 

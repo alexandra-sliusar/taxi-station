@@ -27,7 +27,7 @@ public class OrderService {
 
 	private DaoFactory daoFactory;
 
-	OrderService(DaoFactory daoFactory) {
+	public OrderService(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 

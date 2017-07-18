@@ -23,7 +23,7 @@ public class CarService {
 
 	private DaoFactory daoFactory;
 
-	CarService(DaoFactory daoFactory) {
+	public CarService(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 

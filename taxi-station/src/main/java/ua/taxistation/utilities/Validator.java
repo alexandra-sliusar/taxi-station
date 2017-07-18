@@ -1,5 +1,8 @@
 package ua.taxistation.utilities;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public final class Validator {
 	/** matches:
 	 *  Ak_043_fj@9-.Ajd1.com 
@@ -45,7 +48,12 @@ public final class Validator {
 	}
 
 	public boolean validateAddress(String address) {
-		if (address == null || !address.matches(ADDRESS_REGEX) || address == "") {
+		Pattern pattern = Pattern.compile (ADDRESS_REGEX, Pattern.UNICODE_CASE);
+		if (address == null || address == "") {
+			return false;
+		}
+		Matcher matcher= pattern.matcher(address);
+		if (!matcher.matches()) {
 			return false;
 		}
 		return true;
